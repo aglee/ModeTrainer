@@ -108,19 +108,6 @@ Happy practicing!
 
 ## Development
 
-### Project Structure
-```
-ModeTrainer/
-├── ModeTrainer.jucer          # Projucer project file
-├── Source/                    # Source code
-│   ├── Main.cpp              # Application entry point
-│   ├── MainComponent.cpp     # Main UI component
-│   ├── AudioEngine.cpp       # Audio synthesis engine
-│   └── AboutDialog.h         # About dialog with embedded help
-├── ModeTrainer.icns          # Application icon
-└── README.html               # Detailed HTML documentation
-```
-
 ### Contributing
 This project uses the JUCE framework and follows modern C++ practices. When contributing:
 - Maintain thread safety (GUI operations on message thread only)
