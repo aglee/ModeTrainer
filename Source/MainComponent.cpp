@@ -157,7 +157,7 @@ MainComponent::MainComponent()
     addAndMakeVisible(randomizeRootPitchCheckbox);
     
     // Set up root pitch label
-    rootPitchLabel.setText("Root pitch:", juce::dontSendNotification);
+    rootPitchLabel.setText("Root Pitch:", juce::dontSendNotification);
     rootPitchLabel.attachToComponent(&randomizeRootPitchCheckbox, true);
     addAndMakeVisible(rootPitchLabel);
 
