@@ -1,5 +1,6 @@
 #include "AudioEngine.h"
 #include <cmath>
+#include <juce_events/juce_events.h>
 
 AudioEngine::AudioEngine()
     : currentSampleRate(44100.0)
@@ -74,9 +75,15 @@ void AudioEngine::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
             if (currentNoteIndex >= playbackOrder.size())
             {
                 isPlaying = false;
-                // Call callback to notify playback finished
+                // Call callback to notify playback finished - marshal to message thread
                 if (onPlaybackFinished)
-                    onPlaybackFinished();
+                {
+                    juce::MessageManager::callAsync([this]()
+                    {
+                        if (onPlaybackFinished)
+                            onPlaybackFinished();
+                    });
+                }
                 break;
             }
             else
