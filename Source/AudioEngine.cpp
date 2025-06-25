@@ -225,8 +225,8 @@ std::vector<AudioEngine::ModeType> AudioEngine::getAllModes() const
 
 void AudioEngine::setPlaybackSpeed(float speed)
 {
-    // Clamp speed between 0.5 and 2.0
-    speed = juce::jlimit(0.5f, 2.0f, speed);
+    // Clamp speed between 0.5 and 3.0
+    speed = juce::jlimit(0.5f, 3.0f, speed);
     // Faster speed = shorter note duration
     noteDuration = 0.5f / speed;
 }

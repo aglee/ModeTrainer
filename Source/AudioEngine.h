@@ -38,7 +38,7 @@ public:
     void playMode(ModeType mode, float rootFrequency, PlaybackPattern pattern = PlaybackPattern::Ascending);
     void stopPlaying();
     
-    void setPlaybackSpeed(float speed); // 0.5 to 2.0, where 1.0 is normal speed
+    void setPlaybackSpeed(float speed); // 0.5 to 3.0, where 1.0 is normal speed
     void setPlaybackPattern(PlaybackPattern pattern);
     
     juce::String getPatternName(PlaybackPattern pattern) const;

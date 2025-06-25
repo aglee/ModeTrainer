@@ -14,7 +14,7 @@ A desktop application built with JUCE for practicing musical mode recognition. T
 
 ### Customization Options
 - **Root Note Selection**: Choose starting note from A3 to A6, displayed as musical notes (A4, C#5, Bb3, etc.)
-- **Playback Speed Control**: Adjust tempo from 0.5x (slow) to 2.0x (fast) for different skill levels
+- **Playback Speed Control**: Adjust tempo from 0.5x (slow) to 3.0x (fast) for different skill levels
 - **Multiple Playback Patterns**:
   - **Ascending**: Traditional scale from low to high
   - **Descending**: Scale from high to low
@@ -47,7 +47,7 @@ A desktop application built with JUCE for practicing musical mode recognition. T
 
 ### Customization
 - **Adjust Root Note**: Use the "Root" slider to change the starting pitch
-- **Change Speed**: Use the "Speed" slider (0.5x-2.0x) to adjust playback tempo
+- **Change Speed**: Use the "Speed" slider (0.5x-3.0x) to adjust playback tempo
 - **Select Pattern**: Choose from Ascending, Descending, Ascending by Thirds, Descending by Thirds, or Random
 - **Enable Randomization**: Check boxes to randomize button order and/or root pitch for advanced training
 

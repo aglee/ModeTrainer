@@ -96,7 +96,7 @@ MainComponent::MainComponent()
     rootNoteSlider.updateText();
 
     // Set up speed slider
-    speedSlider.setRange(0.5, 2.0, 0.1); // 0.5x to 2.0x speed
+    speedSlider.setRange(0.5, 3.0, 0.1); // 0.5x to 3.0x speed
     speedSlider.setValue(1.0); // Normal speed
     speedSlider.setSliderStyle(juce::Slider::LinearHorizontal);
     speedSlider.setTextBoxStyle(juce::Slider::TextBoxLeft, true, 60, 20); // true = read-only
