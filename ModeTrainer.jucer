@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="ModeTrainer" name="Mode Trainer" projectType="guiapp" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="1.0.0"
+              bundleIdentifier="com.musiceducation.modetrainer" companyName="Music Education"
+              companyWebsite="" companyEmail="" displaySplashScreen="1" reportAppUsage="1"
+              splashScreenColour="Dark" projectLineFeed="&#10;" defines=""
+              cppLanguageStandard="17">
+  <MAINGROUP id="RootGroup" name="Mode Trainer">
+    <GROUP id="SourceGroup" name="Source">
+      <FILE id="MainComponent" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="MainComponentHeader" name="MainComponent.h" compile="0" resource="0"
+            file="Source/MainComponent.h"/>
+      <FILE id="AudioEngine" name="AudioEngine.cpp" compile="1" resource="0"
+            file="Source/AudioEngine.cpp"/>
+      <FILE id="AudioEngineHeader" name="AudioEngine.h" compile="0" resource="0"
+            file="Source/AudioEngine.h"/>
+      <FILE id="AboutDialog" name="AboutDialog.h" compile="0" resource="0"
+            file="Source/AboutDialog.h"/>
+      <FILE id="EmbeddedContent" name="EmbeddedContent.h" compile="0" resource="0"
+            file="Source/EmbeddedContent.h"/>
+      <FILE id="Main" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+    <GROUP id="Resources" name="Resources">
+      <FILE id="Icon" name="ModeTrainer.icns" compile="0" resource="1" file="ModeTrainer.icns"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" xcodeValidArchs="x86_64,arm64" extraFrameworks=""
+               externalLibraries="" xcodeVstBinaryLocation="$(HOME)/Library/Audio/Plug-Ins/VST/"
+               xcodeVst3BinaryLocation="$(HOME)/Library/Audio/Plug-Ins/VST3/"
+               xcodeAudioUnitBinaryLocation="$(HOME)/Library/Audio/Plug-Ins/Components/"
+               xcodeRtasBinaryLocation="/Library/Application Support/Digidesign/Plug-Ins/"
+               xcodeAAXBinaryLocation="/Library/Application Support/Avid/Audio/Plug-Ins/"
+               microphonePermissionNeeded="0" cameraPermissionNeeded="0" iosBackgroundAudio="0"
+               iosBackgroundBle="0" iosAppGroups="" iCloudPermissions="0" iosScreenSaverEnabled="1"
+               iosDevelopmentTeamID="" iosAppGroupsId="" xcodeSubprojects="">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Mode Trainer" stripLocalSymbols="0"
+                       enablePluginBinaryCopyStep="0" linkTimeOptimisation="0" fastMath="0"
+                       xcodeArchs="x86_64,arm64" osxCompatibility="10.13 SDK" osxArchitecture="Native"
+                       customXcodeFlags="" cppLanguageStandard="17" cppLibType="libc++"
+                       codeSigningIdentity="" relaxedIEEECompliance="1" headerPath=""
+                       libraryPath="" customPListContent="" macOSDeploymentTarget="10.13"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Mode Trainer" stripLocalSymbols="1"
+                       enablePluginBinaryCopyStep="0" linkTimeOptimisation="1" fastMath="1"
+                       xcodeArchs="x86_64,arm64" osxCompatibility="10.13 SDK" osxArchitecture="Native"
+                       customXcodeFlags="" cppLanguageStandard="17" cppLibType="libc++"
+                       codeSigningIdentity="" relaxedIEEECompliance="1" headerPath=""
+                       libraryPath="" customPListContent="" macOSDeploymentTarget="10.13"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path=""/>
+        <MODULEPATH id="juce_audio_devices" path=""/>
+        <MODULEPATH id="juce_audio_formats" path=""/>
+        <MODULEPATH id="juce_audio_processors" path=""/>
+        <MODULEPATH id="juce_audio_utils" path=""/>
+        <MODULEPATH id="juce_core" path=""/>
+        <MODULEPATH id="juce_data_structures" path=""/>
+        <MODULEPATH id="juce_events" path=""/>
+        <MODULEPATH id="juce_graphics" path=""/>
+        <MODULEPATH id="juce_gui_basics" path=""/>
+        <MODULEPATH id="juce_gui_extra" path=""/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2022 targetFolder="Builds/VisualStudio2022" extraCompilerFlags=""
+            extraLinkerFlags="" externalLibraries="" vstLegacyBinaryLocation=""
+            vst3BinaryLocation="" rtasBinaryLocation="" aaxBinaryLocation=""
+            IPPLibrary="IPP_None">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" winArchitecture="x64" debugInformationFormat="ProgramDatabase"
+                       enablePluginBinaryCopyStep="0" linkTimeOptimisation="0" fastMath="0"
+                       generateManifest="1" useRuntimeLibDLL="1" wholeProgramOptimisation="0"
+                       multiProcessorCompilation="1" customPreprocessorDefinitions=""
+                       headerPath="" libraryPath="" userNotes="" customPostBuildCommand=""
+                       customPreBuildCommand="" customPListContent=""/>
+        <CONFIGURATION isDebug="0" name="Release" winArchitecture="x64" debugInformationFormat="ProgramDatabase"
+                       enablePluginBinaryCopyStep="0" linkTimeOptimisation="0" fastMath="1"
+                       generateManifest="1" useRuntimeLibDLL="1" wholeProgramOptimisation="1"
+                       multiProcessorCompilation="1" customPreprocessorDefinitions=""
+                       headerPath="" libraryPath="" userNotes="" customPostBuildCommand=""
+                       customPreBuildCommand="" customPListContent=""/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path=""/>
+        <MODULEPATH id="juce_audio_devices" path=""/>
+        <MODULEPATH id="juce_audio_formats" path=""/>
+        <MODULEPATH id="juce_audio_processors" path=""/>
+        <MODULEPATH id="juce_audio_utils" path=""/>
+        <MODULEPATH id="juce_core" path=""/>
+        <MODULEPATH id="juce_data_structures" path=""/>
+        <MODULEPATH id="juce_events" path=""/>
+        <MODULEPATH id="juce_graphics" path=""/>
+        <MODULEPATH id="juce_gui_basics" path=""/>
+        <MODULEPATH id="juce_gui_extra" path=""/>
+      </MODULEPATHS>
+    </VS2022>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile" extraCompilerFlags="" extraLinkerFlags=""
+                externalLibraries="" cppLanguageStandard="17">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" libraryPath="/usr/X11R6/lib/" linuxArchitecture="-m64"/>
+        <CONFIGURATION isDebug="0" name="Release" libraryPath="/usr/X11R6/lib/" linuxArchitecture="-m64"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path=""/>
+        <MODULEPATH id="juce_audio_devices" path=""/>
+        <MODULEPATH id="juce_audio_formats" path=""/>
+        <MODULEPATH id="juce_audio_processors" path=""/>
+        <MODULEPATH id="juce_audio_utils" path=""/>
+        <MODULEPATH id="juce_core" path=""/>
+        <MODULEPATH id="juce_data_structures" path=""/>
+        <MODULEPATH id="juce_events" path=""/>
+        <MODULEPATH id="juce_graphics" path=""/>
+        <MODULEPATH id="juce_gui_basics" path=""/>
+        <MODULEPATH id="juce_gui_extra" path=""/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_WEB_BROWSER="1" JUCE_USE_CURL="0"/>
+</JUCERPROJECT>

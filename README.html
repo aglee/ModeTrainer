@@ -113,33 +113,25 @@
 
 <h2>Building the Project</h2>
 
-<h3>Prerequisites</h3>
+<h3>Setting Up</h3>
 
 <ul>
-<li>CMake 3.15 or later</li>
-<li>A C++17 compatible compiler (Xcode on macOS, Visual Studio on Windows, GCC/Clang on Linux)</li>
-<li>Git (for downloading JUCE automatically)</li>
+<li>Download and install <a href="https://juce.com/get-juce">Projucer</a> (Part of JUCE)</li>
 </ul>
 
 <h3>Build Instructions</h3>
 
 <ol>
-<li>Clone or download this project</li>
-<li>Open a terminal in the project directory</li>
-<li>Create a build directory and navigate to it:
-<pre><code>mkdir build
-cd build</code></pre></li>
-<li>Configure the project with CMake:
-<pre><code>cmake ..</code></pre></li>
-<li>Build the project:
-<pre><code>cmake --build .</code></pre></li>
+<li>Open the Projucer application</li>
+<li>Select "Open Existing Project" and choose <code>ModeTrainer.jucer</code></li>
+<li>Configure desired settings and click "Save and Open in IDE"</li>
+<li>Choose your development environment (Xcode, Visual Studio, etc.)</li>
+<li>Follow the IDE-specific steps to build and run the project</li>
 </ol>
 
-<p>The application will be built in the build directory. On macOS, look for <code>ModeTrainer.app</code>.</p>
+<h3>Running the Application</h3>
 
-<h3>Dependencies</h3>
-
-<p>This project uses JUCE (version 8.0.4), which will be automatically downloaded during the CMake configuration process. No manual JUCE installation is required.</p>
+<p>On macOS, if using Xcode, look for <code>ModeTrainer.app</code> in the build output directory.</p>
 
 <h2>Technical Details</h2>
 
