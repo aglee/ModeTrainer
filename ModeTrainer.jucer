@@ -2,10 +2,9 @@
 
 <JUCERPROJECT id="ModeTrainer" name="Mode Trainer" projectType="guiapp" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="1.0.0"
-              bundleIdentifier="com.musiceducation.modetrainer" companyName="Music Education"
-              companyWebsite="" companyEmail="" displaySplashScreen="1" reportAppUsage="1"
-              splashScreenColour="Dark" projectLineFeed="&#10;" defines=""
-              cppLanguageStandard="17">
+              bundleIdentifier="com.appkido.modetrainer" companyWebsite=""
+              companyEmail="" displaySplashScreen="1" reportAppUsage="1" splashScreenColour="Dark"
+              projectLineFeed="&#10;" defines="" cppLanguageStandard="17">
   <MAINGROUP id="RootGroup" name="Mode Trainer">
     <GROUP id="SourceGroup" name="Source">
       <FILE id="MainComponent" name="MainComponent.cpp" compile="1" resource="0"
