@@ -22,7 +22,8 @@
       <FILE id="Main" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
     <GROUP id="Resources" name="Resources">
-      <FILE id="Icon" name="ModeTrainer.icns" compile="0" resource="1" file="ModeTrainer.icns"/>
+      <FILE id="m0ipj7" name="ModeTrainer.jpeg" compile="0" resource="1"
+            file="Resources/ModeTrainer.jpeg"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
@@ -47,7 +48,8 @@
                xcodeAAXBinaryLocation="/Library/Application Support/Avid/Audio/Plug-Ins/"
                microphonePermissionNeeded="0" cameraPermissionNeeded="0" iosBackgroundAudio="0"
                iosBackgroundBle="0" iosAppGroups="" iCloudPermissions="0" iosScreenSaverEnabled="1"
-               iosDevelopmentTeamID="" iosAppGroupsId="" xcodeSubprojects="">
+               iosDevelopmentTeamID="" iosAppGroupsId="" xcodeSubprojects=""
+               smallIcon="m0ipj7" bigIcon="m0ipj7">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="Mode Trainer" stripLocalSymbols="0"
                        enablePluginBinaryCopyStep="0" linkTimeOptimisation="0" fastMath="0"
