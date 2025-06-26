@@ -22,19 +22,19 @@ AudioEngine::AudioEngine()
     modes[ModeType::Aeolian] = {0, 2, 3, 5, 7, 8, 10, 12};     // Natural minor
     modes[ModeType::Locrian] = {0, 1, 3, 5, 6, 8, 10, 12};     // Diminished scale
     
-    modeNames[ModeType::Ionian] = "Ionian (Major)";
+    modeNames[ModeType::Ionian] = "Ionian";  // Major
     modeNames[ModeType::Dorian] = "Dorian";
     modeNames[ModeType::Phrygian] = "Phrygian";
     modeNames[ModeType::Lydian] = "Lydian";
     modeNames[ModeType::Mixolydian] = "Mixolydian";
-    modeNames[ModeType::Aeolian] = "Aeolian (Natural Minor)";
+    modeNames[ModeType::Aeolian] = "Aeolian";  // Natural minor
     modeNames[ModeType::Locrian] = "Locrian";
     
     // Initialize pattern names
     patternNames[PlaybackPattern::Ascending] = "Ascending";
     patternNames[PlaybackPattern::Descending] = "Descending";
-    patternNames[PlaybackPattern::Intervallic] = "Ascending by Thirds";
-    patternNames[PlaybackPattern::IntervallicDescending] = "Descending by Thirds";
+    patternNames[PlaybackPattern::Intervallic] = "Thirds Ascending";
+    patternNames[PlaybackPattern::IntervallicDescending] = "Thirds Descending";
     patternNames[PlaybackPattern::Random] = "Random";
 }
 

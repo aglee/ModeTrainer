@@ -88,15 +88,15 @@ MainComponent::MainComponent()
     
     addAndMakeVisible(rootNoteSlider);
 
-    rootNoteLabel.setText("Root:", juce::dontSendNotification);
-    rootNoteLabel.attachToComponent(&rootNoteSlider, true);
+    rootNoteLabel.setText("Root Note:", juce::dontSendNotification);
+    rootNoteLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(rootNoteLabel);
 
     // Ensure the text box reflects the note at startup
     rootNoteSlider.updateText();
 
     // Set up speed slider
-    speedSlider.setRange(0.5, 3.0, 0.1); // 0.5x to 3.0x speed
+    speedSlider.setRange(0.5, 3.0, 0.1);
     speedSlider.setValue(1.0); // Normal speed
     speedSlider.setSliderStyle(juce::Slider::LinearHorizontal);
     speedSlider.setTextBoxStyle(juce::Slider::TextBoxLeft, true, 60, 20); // true = read-only
@@ -105,7 +105,7 @@ MainComponent::MainComponent()
     addAndMakeVisible(speedSlider);
 
     speedLabel.setText("Speed:", juce::dontSendNotification);
-    speedLabel.attachToComponent(&speedSlider, true);
+    speedLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(speedLabel);
 
     // Set up pattern selection ComboBox
@@ -118,7 +118,7 @@ MainComponent::MainComponent()
     addAndMakeVisible(patternComboBox);
 
     patternLabel.setText("Pattern:", juce::dontSendNotification);
-    patternLabel.attachToComponent(&patternComboBox, true);
+    patternLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(patternLabel);
 
     // Set up randomize buttons checkbox
@@ -139,7 +139,7 @@ MainComponent::MainComponent()
     
     // Set up mode buttons label
     modeButtonsLabel.setText("Mode Buttons:", juce::dontSendNotification);
-    modeButtonsLabel.attachToComponent(&randomizeButtonsCheckbox, true);
+    modeButtonsLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(modeButtonsLabel);
 
     // Set up root pitch randomize checkbox
@@ -157,9 +157,9 @@ MainComponent::MainComponent()
     addAndMakeVisible(randomizeRootPitchCheckbox);
     
     // Set up root pitch label
-    rootPitchLabel.setText("Root Pitch:", juce::dontSendNotification);
-    rootPitchLabel.attachToComponent(&randomizeRootPitchCheckbox, true);
-    addAndMakeVisible(rootPitchLabel);
+    rootSelectionLabel.setText("Root Selection:", juce::dontSendNotification);
+    rootSelectionLabel.setJustificationType(juce::Justification::centredRight);
+    addAndMakeVisible(rootSelectionLabel);
 
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired(juce::RuntimePermissions::recordAudio)
@@ -230,6 +230,9 @@ void MainComponent::showAboutDialog()
 void MainComponent::resized()
 {
     auto area = getLocalBounds();
+	auto spaceForLabel = 120;
+	auto labelRightMargin = 0;
+	auto windowHorizontalMargin = 24;
     
     // Title area
     area.removeFromTop(60);
@@ -238,55 +241,72 @@ void MainComponent::resized()
     instructionLabel.setBounds(area.removeFromTop(25));
     scoreLabel.setBounds(area.removeFromTop(25));
 
-    // Root frequency slider
-    auto sliderArea = area.removeFromTop(35);
-    sliderArea.removeFromLeft(120); // Space for label
-    rootNoteSlider.setBounds(sliderArea.reduced(10));
+    // Root note area: label, slider
+    auto rootNoteArea = area.removeFromTop(35).reduced(0, 10);
+    auto rootNoteLabelBounds = rootNoteArea.removeFromLeft(spaceForLabel);
+	rootNoteLabelBounds.removeFromRight(labelRightMargin);
+    rootNoteLabel.setBounds(rootNoteLabelBounds);
+	rootNoteArea.removeFromRight(windowHorizontalMargin);
+    rootNoteSlider.setBounds(rootNoteArea);
 
-    // Speed slider
-    auto speedArea = area.removeFromTop(35);
-    speedArea.removeFromLeft(120); // Space for label
-    speedSlider.setBounds(speedArea.reduced(10));
+	// Root selection area: label, checkbox
+	auto rootSelectionArea = area.removeFromTop(35).reduced(0, 10);
+	auto rootSelectionLabelBounds = rootSelectionArea.removeFromLeft(spaceForLabel);
+	rootSelectionLabelBounds.removeFromRight(labelRightMargin);
+	rootSelectionLabel.setBounds(rootSelectionLabelBounds);
+	rootSelectionArea.removeFromRight(windowHorizontalMargin);
+	randomizeRootPitchCheckbox.setBounds(rootSelectionArea.expanded(0, 3).translated(-3, 0));
+	
+    // Speed slider area: label, slider
+    auto speedArea = area.removeFromTop(35).reduced(0, 10);
+    auto speedLabelBounds = speedArea.removeFromLeft(spaceForLabel);
+	speedLabelBounds.removeFromRight(labelRightMargin);
+    speedLabel.setBounds(speedLabelBounds);
+	speedArea.removeFromRight(windowHorizontalMargin);
+    speedSlider.setBounds(speedArea);
 
-    // Pattern combo box
-    auto patternArea = area.removeFromTop(45); // Increased height from 35 to 45
-    patternArea.removeFromLeft(120); // Space for label
-    patternComboBox.setBounds(patternArea.reduced(10));
+    // Pattern area: label, combo box
+    auto patternArea = area.removeFromTop(35).reduced(0, 10);
+    auto patternLabelBounds = patternArea.removeFromLeft(spaceForLabel);
+    patternLabelBounds.removeFromRight(labelRightMargin);
+    patternLabel.setBounds(patternLabelBounds);
+	patternArea.removeFromRight(windowHorizontalMargin);
+	patternComboBox.setBounds(patternArea.expanded(0, 4));
 
-    // Randomize buttons checkbox
-    auto checkboxArea = area.removeFromTop(40); // Increased height from 30 to 40
-    checkboxArea.removeFromLeft(120); // Space for label (same as other controls)
-    randomizeButtonsCheckbox.setBounds(checkboxArea.reduced(10));
-
-    // Root pitch randomize checkbox
-    auto rootPitchCheckboxArea = area.removeFromTop(40);
-    rootPitchCheckboxArea.removeFromLeft(120); // Space for label
-    randomizeRootPitchCheckbox.setBounds(rootPitchCheckboxArea.reduced(10));
+    // Mode buttons area: label, checkbox
+    auto modeButtonsArea = area.removeFromTop(35).reduced(0, 10);
+    auto modeButtonsLabelBounds = modeButtonsArea.removeFromLeft(spaceForLabel);
+    modeButtonsLabelBounds.removeFromRight(labelRightMargin);
+    modeButtonsLabel.setBounds(modeButtonsLabelBounds);
+	modeButtonsArea.removeFromRight(windowHorizontalMargin);
+	randomizeButtonsCheckbox.setBounds(modeButtonsArea.expanded(0, 3).translated(-3, 0));
 
     area.removeFromTop(10); // Add some spacing
 
     // Control buttons
-    auto controlArea = area.removeFromTop(50);
-    auto playArea = controlArea.removeFromLeft(controlArea.getWidth() / 3).reduced(5);
-    auto stopArea = controlArea.removeFromLeft(controlArea.getWidth() / 2).reduced(5);
-    auto aboutArea = controlArea.reduced(5);
+	auto controlSpacing = 8;
+	auto controlArea = area.removeFromTop(50).reduced(windowHorizontalMargin, 5);
+	auto playArea = controlArea.removeFromLeft((controlArea.getWidth() - 2*controlSpacing) / 3);
+	controlArea.removeFromLeft(controlSpacing);
+    auto stopArea = controlArea.removeFromLeft((controlArea.getWidth() - 1*controlSpacing) / 2);
+	controlArea.removeFromLeft(controlSpacing);
+    auto aboutArea = controlArea;
     
     playButton.setBounds(playArea);
     stopButton.setBounds(stopArea);
     aboutButton.setBounds(aboutArea);
 
-    // Status label (below control buttons, above mode buttons)
+    // Status label
     statusLabel.setBounds(area.removeFromTop(40));
     
     area.removeFromTop(10); // Add spacing before mode buttons
 
     // Mode selection buttons - use remaining space at bottom
     // Reserve space for mode buttons at the bottom
-    auto modeArea = area;
+	auto modeArea = area.reduced(windowHorizontalMargin, 0);
     int buttonHeight = 45;
     int buttonSpacing = 8;
     int buttonsPerRow = 4;
-    int numRows = 2;
     
     // Calculate button width to fit 4 buttons per row with spacing
     int totalButtonWidth = modeArea.getWidth() - (buttonsPerRow + 1) * buttonSpacing;

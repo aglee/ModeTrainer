@@ -43,7 +43,7 @@ private:
     juce::Label scoreLabel;
     juce::Label statusLabel;  // Combined status/feedback label
     juce::Label rootNoteLabel;
-    juce::Label rootPitchLabel;
+    juce::Label rootSelectionLabel;
     juce::Label speedLabel;
     juce::Label patternLabel;
     juce::Label modeButtonsLabel;
