@@ -2,9 +2,9 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "MarkdownConverter.h"
-#include "EmbeddedMarkdown.h"
 #include <juce_core/juce_core.h>
 #include <juce_gui_extra/juce_gui_extra.h>
+#include "BinaryData.h"
 
 // Custom WebBrowserComponent that forwards specific keys to parent and opens external links
 class DialogWebBrowser : public juce::WebBrowserComponent
@@ -57,9 +57,9 @@ public:
         infoLabel.setJustificationType(juce::Justification::centred);
         addAndMakeVisible(infoLabel);
         
-        // Convert embedded README markdown to HTML and display in a web view
+        // Convert README.md from binary data to HTML and display in a web view
         MarkdownConverter converter;
-        std::string markdownContent = EmbeddedContent::README_MARKDOWN.toStdString();
+        std::string markdownContent(BinaryData::README_md, BinaryData::README_mdSize);
         std::string convertedHtml = converter.convertToHtml(markdownContent);
         
         // Wrap in full HTML document with styling

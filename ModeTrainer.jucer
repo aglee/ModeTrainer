@@ -19,15 +19,11 @@
             file="Source/AboutDialog.h"/>
       <FILE id="CustomLookAndFeel" name="CustomLookAndFeel.h" compile="0"
             resource="0" file="Source/CustomLookAndFeel.h"/>
-      <FILE id="EmbeddedContent" name="EmbeddedContent.h" compile="0" resource="0"
-            file="Source/EmbeddedContent.h"/>
       <FILE id="Main" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="MarkdownConverter" name="MarkdownConverter.cpp" compile="1"
             resource="0" file="Source/MarkdownConverter.cpp"/>
       <FILE id="MarkdownConverterHeader" name="MarkdownConverter.h" compile="0"
             resource="0" file="Source/MarkdownConverter.h"/>
-      <FILE id="EmbeddedMarkdownHeader" name="EmbeddedMarkdown.h" compile="0"
-            resource="0" file="Source/EmbeddedMarkdown.h"/>
     </GROUP>
     <GROUP id="Documentation" name="Documentation">
       <FILE id="ReadMe" name="README.md" compile="0" resource="0" file="README.md"/>
@@ -35,6 +31,7 @@
     <GROUP id="Resources" name="Resources">
       <FILE id="m0ipj7" name="ModeTrainer.jpeg" compile="0" resource="1"
             file="Resources/ModeTrainer.jpeg"/>
+      <FILE id="readme_md" name="README.md" compile="0" resource="1" file="README.md"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
