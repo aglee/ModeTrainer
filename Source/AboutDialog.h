@@ -6,7 +6,7 @@
 #include <juce_core/juce_core.h>
 #include <juce_gui_extra/juce_gui_extra.h>
 
-// Custom WebBrowserComponent that forwards specific keys to parent
+// Custom WebBrowserComponent that forwards specific keys to parent and opens external links
 class DialogWebBrowser : public juce::WebBrowserComponent
 {
 public:
@@ -20,9 +20,17 @@ public:
                 return parent->keyPressed(key);
             }
         }
-        
-        // Let the web view handle all other keys normally
-        return WebBrowserComponent::keyPressed(key);
+        return juce::WebBrowserComponent::keyPressed(key);
+    }
+    
+    bool pageAboutToLoad(const juce::String& newURL) override
+    {
+        if (newURL.startsWith("http://") || newURL.startsWith("https://"))
+        {
+            juce::URL(newURL).launchInDefaultBrowser();
+            return false;  // Prevent loading in WebView
+        }
+        return true;
     }
 };
 
@@ -31,7 +39,6 @@ class AboutDialog : public juce::Component
 public:
     AboutDialog()
     {
-        setSize(600, 500);
         
         // Title
         titleLabel.setText("Musical Mode Trainer", juce::dontSendNotification);
