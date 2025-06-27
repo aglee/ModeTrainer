@@ -27,8 +27,9 @@ MainComponent::MainComponent()
     // Set up the play button
     playButton.setButtonText("Play Random Scale");
     playButton.onClick = [this] { playRandomScale(); };
-    playButton.setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
+    playButton.setColour(juce::TextButton::buttonColourId, juce::Colour(0x880000ff));
 	playButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+//	playButton.setColour(juce::ComboBox::outlineColourId, juce::Colours::red);
     addAndMakeVisible(playButton);
     
     // Set up the stop button
@@ -343,13 +344,13 @@ void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
     if (correct)
     {
         score++;
-        statusLabel.setText("Correct! That was " + audioEngine.getModeName(currentMode), juce::dontSendNotification);
+        statusLabel.setText("Correct! That was " + audioEngine.getModeName(currentMode) + ".", juce::dontSendNotification);
         statusLabel.setColour(juce::Label::textColourId, juce::Colours::green);
     }
     else
     {
         statusLabel.setText("Incorrect. That was " + audioEngine.getModeName(currentMode) + 
-                            ", you guessed " + audioEngine.getModeName(guessedMode), juce::dontSendNotification);
+                            ", you guessed " + audioEngine.getModeName(guessedMode) + ".", juce::dontSendNotification);
         statusLabel.setColour(juce::Label::textColourId, juce::Colours::red);
     }
     
@@ -373,6 +374,7 @@ void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
 void MainComponent::showInstructionsText()
 {
     statusLabel.setText(instructionsText, juce::dontSendNotification);
+	statusLabel.setColour(juce::Label::textColourId, juce::Colours::black);
 }
 
 void MainComponent::practiceMode(AudioEngine::ModeType mode)
@@ -392,8 +394,8 @@ void MainComponent::practiceMode(AudioEngine::ModeType mode)
     };
     audioEngine.playMode(mode, rootFreq, selectedPattern);
     
-    statusLabel.setText("Playing " + audioEngine.getModeName(mode), juce::dontSendNotification);
-    statusLabel.setColour(juce::Label::textColourId, juce::Colours::orange);
+    statusLabel.setText("Playing " + audioEngine.getModeName(mode) + "...", juce::dontSendNotification);
+    statusLabel.setColour(juce::Label::textColourId, juce::Colours::black);
 }
 
 AudioEngine::PlaybackPattern MainComponent::getSelectedPattern() const
@@ -487,8 +489,8 @@ void MainComponent::playRandomScale()
     audioEngine.playMode(currentMode, rootFreq, selectedPattern);
     
     gameActive = true;
-    statusLabel.setText("Playing... Listen and select your answer below.", juce::dontSendNotification);
-    statusLabel.setColour(juce::Label::textColourId, juce::Colours::lightblue);
+    statusLabel.setText("Playing... Listen and select your answer below...", juce::dontSendNotification);
+    statusLabel.setColour(juce::Label::textColourId, juce::Colours::black);
     
     // Randomize button order if checkbox is checked
     randomizeButtonOrder();

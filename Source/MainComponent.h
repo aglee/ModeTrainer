@@ -8,7 +8,7 @@
 class LightModeLookAndFeel : public juce::LookAndFeel_V4 {
 public:
     LightModeLookAndFeel() {
-        setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::white);
+        setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::lightgrey);
 
         setColour(juce::Label::textColourId, juce::Colours::black);
 
@@ -26,7 +26,7 @@ public:
         setColour(juce::ToggleButton::tickColourId, juce::Colours::black);
         setColour(juce::ToggleButton::tickDisabledColourId, juce::Colours::grey);
 
-		setColour(juce::Slider::backgroundColourId, juce::Colours::lightgrey);
+		setColour(juce::Slider::backgroundColourId, juce::Colour(0xffA8A8A8));
         setColour(juce::Slider::thumbColourId, juce::Colours::darkblue);
         setColour(juce::Slider::trackColourId, juce::Colours::darkgrey);
         setColour(juce::Slider::rotarySliderFillColourId, juce::Colours::darkblue);
@@ -35,6 +35,12 @@ public:
         setColour(juce::Slider::textBoxBackgroundColourId, juce::Colours::white);
         setColour(juce::Slider::textBoxHighlightColourId, juce::Colours::lightblue);
         setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::darkgrey);
+        
+        setColour(juce::PopupMenu::backgroundColourId, juce::Colours::white);
+        setColour(juce::PopupMenu::textColourId, juce::Colours::black);
+        setColour(juce::PopupMenu::headerTextColourId, juce::Colours::black);
+        setColour(juce::PopupMenu::highlightedBackgroundColourId, juce::Colours::lightblue);
+        setColour(juce::PopupMenu::highlightedTextColourId, juce::Colours::black);
     }
     
 	juce::Font getComboBoxFont(juce::ComboBox&) override
