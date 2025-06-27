@@ -2,30 +2,30 @@
 #include "AboutDialog.h"
 
 MainComponent::MainComponent()
-    : audioEngine()
-    , random(juce::Time::currentTimeMillis())
-    , score(0)
-    , totalQuestions(0)
-    , currentMode(AudioEngine::ModeType::Ionian)
-    , lastPlayedMode(AudioEngine::ModeType::Ionian)
-    , gameActive(false)
-    , isPracticeMode(false)
+: audioEngine()
+, random(juce::Time::currentTimeMillis())
+, score(0)
+, totalQuestions(0)
+, currentMode(AudioEngine::ModeType::Ionian)
+, lastPlayedMode(AudioEngine::ModeType::Ionian)
+, gameActive(false)
+, isPracticeMode(false)
 {
-    setSize(800, 600);
+    setSize(800, 400);
     
     
     // Make sure the window is properly sized
-	if (auto* window = getTopLevelComponent()) {
-		window->setSize(800, 600);
-	}
-
+    if (auto* window = getTopLevelComponent()) {
+        window->setSize(800, 400);
+    }
+    
     // Set up the play button
     playButton.setButtonText("Play Random Scale");
     playButton.onClick = [this] { playRandomScale(); };
-	playButton.setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
-	playButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::red);
+    playButton.setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
+    playButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::red);
     addAndMakeVisible(playButton);
-
+    
     // Set up the stop button
     stopButton.setButtonText("Stop");
     stopButton.onClick = [this] { stopPlaying(); };
@@ -35,7 +35,7 @@ MainComponent::MainComponent()
     aboutButton.setButtonText("About");
     aboutButton.onClick = [this] { showAboutDialog(); };
     addAndMakeVisible(aboutButton);
-
+    
     // Set up mode selection buttons
     auto modes = audioEngine.getAllModes();
     modeOrder = modes; // Store original order
@@ -53,28 +53,28 @@ MainComponent::MainComponent()
                 practiceMode(mode); 
         };
         button->setEnabled(true); // Always enabled for practice mode
-//        button->setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
-//        button->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
-//        button->setColour(juce::TextButton::buttonOnColourId, juce::Colours::lightblue);
+        //        button->setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
+        //        button->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+        //        button->setColour(juce::TextButton::buttonOnColourId, juce::Colours::lightblue);
         modeButtons.push_back(std::move(button));
         addAndMakeVisible(modeButtons.back().get());
     }
-
+    
     // Set up labels - instruction text moved to status field
-
+    
     scoreLabel.setText("Score: 0/0", juce::dontSendNotification);
     scoreLabel.setJustificationType(juce::Justification::centred);
-	scoreLabel.setFont(scoreLabel.getFont().withHeight(20.0f));
+    scoreLabel.setFont(scoreLabel.getFont().withHeight(20.0f));
     addAndMakeVisible(scoreLabel);
-
-    statusLabel.setText(instructionsText, juce::dontSendNotification);
+    
     statusLabel.setJustificationType(juce::Justification::centred);
     auto statusLabelFont = statusLabel.getFont();
     statusLabelFont.setHeight(16.0f);
     statusLabelFont.setBold(true);
     statusLabel.setFont(statusLabelFont);
+    showInstructionsText();
     addAndMakeVisible(statusLabel);
-
+    
     // Set up root note slider (now using note indices instead of frequencies)
     // Range: 12-24 represents A4 to A5 (one octave)
     rootNoteSlider.setRange(12.0, 24.0, 1.0); 
@@ -88,14 +88,14 @@ MainComponent::MainComponent()
     };
     
     addAndMakeVisible(rootNoteSlider);
-
+    
     rootNoteLabel.setText("Root Note:", juce::dontSendNotification);
     rootNoteLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(rootNoteLabel);
-
+    
     // Ensure the text box reflects the note at startup
     rootNoteSlider.updateText();
-
+    
     // Set up speed slider
     speedSlider.setRange(0.5, 3.0, 0.1);
     speedSlider.setValue(1.0); // Normal speed
@@ -104,11 +104,11 @@ MainComponent::MainComponent()
     speedSlider.setTextValueSuffix("x");
     speedSlider.onValueChange = [this] { audioEngine.setPlaybackSpeed(static_cast<float>(speedSlider.getValue())); };
     addAndMakeVisible(speedSlider);
-
+    
     speedLabel.setText("Speed:", juce::dontSendNotification);
     speedLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(speedLabel);
-
+    
     // Set up pattern selection ComboBox
     auto patterns = audioEngine.getAllPatterns();
     for (size_t i = 0; i < patterns.size(); ++i)
@@ -121,11 +121,11 @@ MainComponent::MainComponent()
     patternComboBox.setLookAndFeel(&customComboBoxLookAndFeel);
     
     addAndMakeVisible(patternComboBox);
-
+    
     patternLabel.setText("Pattern:", juce::dontSendNotification);
     patternLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(patternLabel);
-
+    
     // Set up randomize buttons checkbox
     randomizeModeButtonsCheckbox.setButtonText("Randomize button order on each turn");
     randomizeModeButtonsCheckbox.setToggleState(false, juce::dontSendNotification); // Off by default
@@ -146,7 +146,7 @@ MainComponent::MainComponent()
     modeButtonsLabel.setText("Mode Buttons:", juce::dontSendNotification);
     modeButtonsLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(modeButtonsLabel);
-
+    
     // Set up root pitch randomize checkbox
     randomizeRootCheckbox.setButtonText("Randomize");
     randomizeRootCheckbox.setToggleState(false, juce::dontSendNotification); // Off by default
@@ -175,13 +175,13 @@ MainComponent::MainComponent()
     optionsLabel.setFont(difficultyFont);
     optionsLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     addAndMakeVisible(optionsLabel);
-
+    
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired(juce::RuntimePermissions::recordAudio)
         && !juce::RuntimePermissions::isGranted(juce::RuntimePermissions::recordAudio))
     {
         juce::RuntimePermissions::request(juce::RuntimePermissions::recordAudio,
-                                         [&](bool granted) { setAudioChannels(granted ? 2 : 0, 2); });
+                                          [&](bool granted) { setAudioChannels(granted ? 2 : 0, 2); });
     }
     else
     {
@@ -190,7 +190,7 @@ MainComponent::MainComponent()
     
     // Force initial layout to ensure buttons are visible
     juce::MessageManager::callAsync([this]()
-    {
+                                    {
         resized();
         repaint();
     });
@@ -204,21 +204,6 @@ MainComponent::~MainComponent()
     shutdownAudio();
 }
 
-void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
-{
-    audioEngine.prepareToPlay(samplesPerBlockExpected, sampleRate);
-}
-
-void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
-{
-    audioEngine.getNextAudioBlock(bufferToFill);
-}
-
-void MainComponent::releaseResources()
-{
-    audioEngine.releaseResources();
-}
-
 void MainComponent::paint(juce::Graphics& g)
 {
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
@@ -228,23 +213,6 @@ void MainComponent::paint(juce::Graphics& g)
     g.drawText("Musical Mode Trainer", getLocalBounds().removeFromTop(60), juce::Justification::centred);
 }
 
-void MainComponent::showAboutDialog()
-{
-    juce::DialogWindow::LaunchOptions options;
-    options.content.setOwned(new AboutDialog());
-    options.content->setSize(600, 500);
-    options.dialogTitle = "About Musical Mode Trainer";
-    options.dialogBackgroundColour = juce::Colours::darkgrey;
-    options.escapeKeyTriggersCloseButton = true;
-    options.useNativeTitleBar = true;
-    options.resizable = false;
-    options.useBottomRightCornerResizer = false;
-
-    options.launchAsync();
-}
-
-
-
 void MainComponent::resized()
 {
     auto area = getLocalBounds();
@@ -252,15 +220,14 @@ void MainComponent::resized()
     
     // Title area
     area.removeFromTop(60);
-
+    
     // Score label
     scoreLabel.setBounds(area.removeFromTop(25));
+    area.removeFromTop(20);
     
-    area.removeFromTop(10); // Add some spacing
-
-	// Status label
-	statusLabel.setBounds(area.removeFromTop(40));
-	
+    // Status label
+    statusLabel.setBounds(area.removeFromTop(25));
+    
     // Control buttons
     auto controlSpacing = 8;
     auto controlArea = area.removeFromTop(50).reduced(windowHorizontalMargin, 5);
@@ -273,14 +240,14 @@ void MainComponent::resized()
     playButton.setBounds(playArea);
     stopButton.setBounds(stopArea);
     aboutButton.setBounds(aboutArea);
-
-    area.removeFromTop(15); // Add spacing before mode buttons
-
+    
+    area.removeFromTop(10); // Add spacing before mode buttons
+    
     // Mode selection buttons - use middle space
     auto modeArea = area.removeFromTop(40).reduced(windowHorizontalMargin, 0);
     int buttonHeight = 28;
     int buttonSpacing = 8;
-	int buttonsPerRow = 7;   //4;
+    int buttonsPerRow = 7;   //4;
     
     // Calculate button width to fit buttonsPerRow buttons per row with spacing
     int totalButtonWidth = modeArea.getWidth() - (buttonsPerRow + 1) * buttonSpacing;
@@ -311,101 +278,50 @@ void MainComponent::resized()
     
     optionsLabel.setBounds(area.removeFromTop(25));
     area.removeFromTop(5); // Small spacing below section label
-
-	auto layOutLabelAndControl = [&area](Component &label, Component &control) {
-		auto slice = area.removeFromTop(35).reduced(24, 0);
-		auto labelArea = slice.removeFromLeft(100);
-		auto controlArea = slice;
-		label.setBounds(labelArea);
-		control.setBounds(controlArea);
-	};
-	
-	layOutLabelAndControl(rootNoteLabel, rootNoteSlider);
-	layOutLabelAndControl(rootSelectionLabel, randomizeRootCheckbox);
-	layOutLabelAndControl(speedLabel, speedSlider);
-	layOutLabelAndControl(patternLabel, patternComboBox);
-	layOutLabelAndControl(modeButtonsLabel, randomizeModeButtonsCheckbox);
-	
-	patternComboBox.setBounds(patternComboBox.getBounds().reduced(0, 6));
-	auto checkboxNudgeX = -4;
-	auto checkboxNudgeY = 1;
-	randomizeRootCheckbox.setBounds(randomizeRootCheckbox.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
-	randomizeModeButtonsCheckbox.setBounds(randomizeModeButtonsCheckbox.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
-}
-
-void MainComponent::playRandomScale()
-{
-    if (audioEngine.isCurrentlyPlaying())
-        return;
-
-    auto modes = audioEngine.getAllModes();
     
-    // Avoid playing the same mode twice in a row
-    AudioEngine::ModeType newMode;
-    do {
-        int randomIndex = random.nextInt(static_cast<int>(modes.size()));
-        newMode = modes[randomIndex];
-    } while (newMode == lastPlayedMode && modes.size() > 1);
-    
-    currentMode = newMode;
-    lastPlayedMode = currentMode;
-
-    // Handle root pitch randomization
-    float rootFreq;
-    if (randomizeRootCheckbox.getToggleState())
-    {
-        // Generate random note index within slider range
-        double minNote = rootNoteSlider.getMinimum();
-        double maxNote = rootNoteSlider.getMaximum();
-        int randomNoteIndex = static_cast<int>(minNote + random.nextDouble() * (maxNote - minNote));
-        
-        // Update slider to reflect the randomly chosen value
-        rootNoteSlider.setValue(randomNoteIndex, juce::dontSendNotification);
-        
-        // Convert note index to frequency
-        rootFreq = static_cast<float>(noteNameToFrequency(randomNoteIndex));
-    }
-    else
-    {
-        // Convert current slider value (note index) to frequency
-        int noteIndex = static_cast<int>(rootNoteSlider.getValue());
-        rootFreq = static_cast<float>(noteNameToFrequency(noteIndex));
-    }
-    
-    auto selectedPattern = getSelectedPattern();
-    audioEngine.onPlaybackFinished = [this]() {
-        statusLabel.setText("", juce::dontSendNotification);
+    auto layOutLabelAndControl = [&area](Component &label, Component &control) {
+        auto slice = area.removeFromTop(35).reduced(24, 0);
+        auto labelArea = slice.removeFromLeft(100);
+        auto controlArea = slice;
+        label.setBounds(labelArea);
+        control.setBounds(controlArea);
     };
-    audioEngine.playMode(currentMode, rootFreq, selectedPattern);
-
-    gameActive = true;
-    statusLabel.setText("Playing... Listen and select your answer below.", juce::dontSendNotification);
-    statusLabel.setColour(juce::Label::textColourId, juce::Colours::lightblue);
-
-    // Randomize button order if checkbox is checked
-    randomizeButtonOrder();
-
-    // Enable mode buttons
-    for (auto& button : modeButtons)
-        button->setEnabled(true);
-
-    // Force a layout update to make sure buttons appear
-    resized();
-    repaint();
+    
+    layOutLabelAndControl(rootNoteLabel, rootNoteSlider);
+    layOutLabelAndControl(rootSelectionLabel, randomizeRootCheckbox);
+    layOutLabelAndControl(speedLabel, speedSlider);
+    layOutLabelAndControl(patternLabel, patternComboBox);
+    layOutLabelAndControl(modeButtonsLabel, randomizeModeButtonsCheckbox);
+    
+    patternComboBox.setBounds(patternComboBox.getBounds().reduced(0, 6));
+    auto checkboxNudgeX = -4;
+    auto checkboxNudgeY = 1;
+    randomizeRootCheckbox.setBounds(randomizeRootCheckbox.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
+    randomizeModeButtonsCheckbox.setBounds(randomizeModeButtonsCheckbox.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
 }
 
-void MainComponent::stopPlaying()
+void MainComponent::showAboutDialog()
 {
-    audioEngine.stopPlaying();
-    statusLabel.setText("", juce::dontSendNotification);
-    repaint();
+    juce::DialogWindow::LaunchOptions options;
+    options.content.setOwned(new AboutDialog());
+    options.content->setSize(600, 500);
+    options.dialogTitle = "About Musical Mode Trainer";
+    options.dialogBackgroundColour = juce::Colours::darkgrey;
+    options.escapeKeyTriggersCloseButton = true;
+    options.useNativeTitleBar = true;
+    options.resizable = false;
+    options.useBottomRightCornerResizer = false;
+    
+    options.launchAsync();
 }
+
+// MARK: - (Game play)
 
 void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
 {
     if (!gameActive)
         return;
-
+    
     totalQuestions++;
     bool correct = (guessedMode == currentMode);
     
@@ -421,18 +337,18 @@ void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
                             ", you guessed " + audioEngine.getModeName(guessedMode), juce::dontSendNotification);
         statusLabel.setColour(juce::Label::textColourId, juce::Colours::red);
     }
-
+    
     // Update score display
     scoreLabel.setText("Score: " + juce::String(score) + "/" + juce::String(totalQuestions) + 
-                      " (" + juce::String(static_cast<int>((static_cast<float>(score) / totalQuestions) * 100)) + "%)", 
-                      juce::dontSendNotification);
-
+                       " (" + juce::String(static_cast<int>((static_cast<float>(score) / totalQuestions) * 100)) + "%)", 
+                       juce::dontSendNotification);
+    
     gameActive = false;
     
     // After a short delay, show the instruction for next turn
-	juce::Timer::callAfterDelay(2000, [this]() {
+    juce::Timer::callAfterDelay(2000, [this]() {
         if (!gameActive) { // Only update if still not in game
-			statusLabel.setText(instructionsText, juce::dontSendNotification);
+            statusLabel.setText(instructionsText, juce::dontSendNotification);
             statusLabel.setColour(juce::Label::textColourId, juce::Colours::white);
         }
     });
@@ -440,17 +356,26 @@ void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
     // Buttons stay enabled for practice mode
 }
 
+void MainComponent::showInstructionsText()
+{
+    statusLabel.setText(instructionsText, juce::dontSendNotification);
+    statusLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+}
+
 void MainComponent::practiceMode(AudioEngine::ModeType mode)
 {
     if (audioEngine.isCurrentlyPlaying() || gameActive)
         return;
-
+    
     // Convert note index to frequency
     int noteIndex = static_cast<int>(rootNoteSlider.getValue());
     float rootFreq = static_cast<float>(noteNameToFrequency(noteIndex));
     auto selectedPattern = getSelectedPattern();
     audioEngine.onPlaybackFinished = [this]() {
-        statusLabel.setText("", juce::dontSendNotification);
+        // Show instructions when playback finishes
+        if (!gameActive && !audioEngine.isCurrentlyPlaying()) {
+            showInstructionsText();
+        }
     };
     audioEngine.playMode(mode, rootFreq, selectedPattern);
     
@@ -501,6 +426,76 @@ void MainComponent::randomizeButtonOrder()
     }
 }
 
+// MARK: - (Playing scales)
+
+void MainComponent::playRandomScale()
+{
+    if (audioEngine.isCurrentlyPlaying())
+        return;
+    
+    auto modes = audioEngine.getAllModes();
+    
+    // Avoid playing the same mode twice in a row
+    AudioEngine::ModeType newMode;
+    do {
+        int randomIndex = random.nextInt(static_cast<int>(modes.size()));
+        newMode = modes[randomIndex];
+    } while (newMode == lastPlayedMode && modes.size() > 1);
+    
+    currentMode = newMode;
+    lastPlayedMode = currentMode;
+    
+    // Handle root pitch randomization
+    float rootFreq;
+    if (randomizeRootCheckbox.getToggleState())
+    {
+        // Generate random note index within slider range
+        double minNote = rootNoteSlider.getMinimum();
+        double maxNote = rootNoteSlider.getMaximum();
+        int randomNoteIndex = static_cast<int>(minNote + random.nextDouble() * (maxNote - minNote));
+        
+        // Update slider to reflect the randomly chosen value
+        rootNoteSlider.setValue(randomNoteIndex, juce::dontSendNotification);
+        
+        // Convert note index to frequency
+        rootFreq = static_cast<float>(noteNameToFrequency(randomNoteIndex));
+    }
+    else
+    {
+        // Convert current slider value (note index) to frequency
+        int noteIndex = static_cast<int>(rootNoteSlider.getValue());
+        rootFreq = static_cast<float>(noteNameToFrequency(noteIndex));
+    }
+    
+    auto selectedPattern = getSelectedPattern();
+    audioEngine.onPlaybackFinished = [this]() {
+        statusLabel.setText("", juce::dontSendNotification);
+    };
+    audioEngine.playMode(currentMode, rootFreq, selectedPattern);
+    
+    gameActive = true;
+    statusLabel.setText("Playing... Listen and select your answer below.", juce::dontSendNotification);
+    statusLabel.setColour(juce::Label::textColourId, juce::Colours::lightblue);
+    
+    // Randomize button order if checkbox is checked
+    randomizeButtonOrder();
+    
+    // Enable mode buttons
+    for (auto& button : modeButtons)
+        button->setEnabled(true);
+    
+    // Force a layout update to make sure buttons appear
+    resized();
+    repaint();
+}
+
+void MainComponent::stopPlaying()
+{
+    audioEngine.stopPlaying();
+    showInstructionsText();
+    repaint();
+}
+
 juce::String MainComponent::frequencyToNoteName(double frequency) const
 {
     // A4 = 440 Hz is our reference (note index 12)
@@ -533,5 +528,22 @@ int MainComponent::frequencyToNoteIndex(double frequency) const
     // Convert frequency back to note index (inverse of noteNameToFrequency)
     double a3 = 220.0;
     return static_cast<int>(round(12.0 * log2(frequency / a3)));
+}
+
+// MARK: - (AudioAppComponent)
+
+void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
+{
+    audioEngine.prepareToPlay(samplesPerBlockExpected, sampleRate);
+}
+
+void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
+{
+    audioEngine.getNextAudioBlock(bufferToFill);
+}
+
+void MainComponent::releaseResources()
+{
+    audioEngine.releaseResources();
 }
 

@@ -84,7 +84,8 @@ private:
     void playRandomScale();
     void stopPlaying();
     void guessMode(AudioEngine::ModeType guessedMode);
-    void practiceMode(AudioEngine::ModeType mode);
+	void practiceMode(AudioEngine::ModeType mode);
+	void showInstructionsText();
     AudioEngine::PlaybackPattern getSelectedPattern() const;
     void randomizeButtonOrder();
     juce::String frequencyToNoteName(double frequency) const;
