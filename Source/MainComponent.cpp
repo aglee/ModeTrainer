@@ -11,7 +11,7 @@ MainComponent::MainComponent()
 , gameActive(false)
 , isPracticeMode(false)
 {
-    setSize(800, 400);
+    setSize(kDefaultWindowWidth, kDefaultWindowHeight);
     
     // Set up title label
     titleLabel.setText("Musical Mode Trainer", juce::dontSendNotification);
@@ -21,7 +21,7 @@ MainComponent::MainComponent()
     
     // Make sure the window is properly sized
     if (auto* window = getTopLevelComponent()) {
-        window->setSize(800, 400);
+        window->setSize(kDefaultWindowWidth, kDefaultWindowHeight);
     }
     
     // Set up the play button
@@ -206,6 +206,15 @@ MainComponent::MainComponent()
     // Force initial layout to ensure buttons are visible
     juce::MessageManager::callAsync([this]()
                                     {
+        // Set minimum window size constraints
+        if (auto* window = getTopLevelComponent())
+        {
+            if (auto* documentWindow = dynamic_cast<juce::DocumentWindow*>(window))
+            {
+                documentWindow->setResizeLimits(kMinWindowWidth, kMinWindowHeight, kMaxWindowWidth, kMaxWindowHeight);
+            }
+        }
+        
         resized();
         repaint();
     });

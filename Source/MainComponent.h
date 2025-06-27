@@ -8,6 +8,14 @@
 class MainComponent  : public juce::AudioAppComponent
 {
 public:
+    // Window size constants
+    static constexpr int kMinWindowWidth = 720;
+    static constexpr int kMinWindowHeight = 550;
+    static constexpr int kDefaultWindowWidth = 800;
+    static constexpr int kDefaultWindowHeight = 550;
+    static constexpr int kMaxWindowWidth = 8192;
+    static constexpr int kMaxWindowHeight = 8192;
+    
     MainComponent();
     ~MainComponent() override;
 
