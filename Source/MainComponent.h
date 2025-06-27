@@ -4,10 +4,33 @@
 #include <juce_audio_utils/juce_audio_utils.h>
 #include "AudioEngine.h"
 
-// Custom LookAndFeel for ComboBox popup menu
-class CustomComboBoxLookAndFeel : public juce::LookAndFeel_V4
-{
+// Custom LookAndFeel for Light Mode
+class LightModeLookAndFeel : public juce::LookAndFeel_V4 {
 public:
+    LightModeLookAndFeel() {
+        setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::white);
+        setColour(juce::Label::textColourId, juce::Colours::black);
+        setColour(juce::TextButton::buttonColourId, juce::Colours::white);
+        setColour(juce::TextButton::textColourOnId, juce::Colours::black);
+        setColour(juce::TextButton::textColourOffId, juce::Colours::black);
+        setColour(juce::ComboBox::backgroundColourId, juce::Colours::white);
+        setColour(juce::ComboBox::textColourId, juce::Colours::black);
+        setColour(juce::ComboBox::outlineColourId, juce::Colours::darkgrey);
+        setColour(juce::ComboBox::buttonColourId, juce::Colours::lightgrey);
+        setColour(juce::ToggleButton::textColourId, juce::Colours::black);
+        setColour(juce::ToggleButton::tickColourId, juce::Colours::darkblue);
+        setColour(juce::ToggleButton::tickDisabledColourId, juce::Colours::grey);
+		setColour(juce::Slider::backgroundColourId, juce::Colours::lightgrey);
+        setColour(juce::Slider::thumbColourId, juce::Colours::darkblue);
+        setColour(juce::Slider::trackColourId, juce::Colours::darkgrey);
+        setColour(juce::Slider::rotarySliderFillColourId, juce::Colours::darkblue);
+        setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colours::darkgrey);
+        setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
+        setColour(juce::Slider::textBoxBackgroundColourId, juce::Colours::white);
+        setColour(juce::Slider::textBoxHighlightColourId, juce::Colours::lightblue);
+        setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::darkgrey);
+    }
+
 	juce::Font getComboBoxFont(juce::ComboBox&) override
 	{
 		return juce::Font(14.0f);
@@ -62,13 +85,15 @@ private:
     std::vector<std::unique_ptr<juce::TextButton>> modeButtons;
     std::vector<AudioEngine::ModeType> modeOrder; // Current order of modes in buttons
     
+    juce::Label titleLabel;
     juce::Label scoreLabel;
     juce::Label statusLabel;  // Combined status/feedback label
     juce::Label rootNoteLabel;
     juce::Label rootSelectionLabel;
     juce::Label speedLabel;
     juce::Label patternLabel;
-    juce::Label modeButtonsLabel;
+	juce::Label modeButtonsLabel;
+	juce::Label colorsLabel;
     juce::Label optionsLabel;
     
     juce::Slider rootNoteSlider;
@@ -76,9 +101,10 @@ private:
     juce::ComboBox patternComboBox;
     juce::ToggleButton randomizeModeButtonsCheckbox;
     juce::ToggleButton randomizeRootCheckbox;
+    juce::ToggleButton lightModeToggle;
     
     // Custom LookAndFeel
-    CustomComboBoxLookAndFeel customComboBoxLookAndFeel;
+    LightModeLookAndFeel lightModeLookAndFeel;
 
     // Methods
     void playRandomScale();

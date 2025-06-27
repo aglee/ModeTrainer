@@ -13,6 +13,11 @@ MainComponent::MainComponent()
 {
     setSize(800, 400);
     
+    // Set up title label
+    titleLabel.setText("Musical Mode Trainer", juce::dontSendNotification);
+    titleLabel.setJustificationType(juce::Justification::centred);
+    titleLabel.setFont(juce::Font(24.0f, juce::Font::bold));
+    addAndMakeVisible(titleLabel);
     
     // Make sure the window is properly sized
     if (auto* window = getTopLevelComponent()) {
@@ -23,7 +28,7 @@ MainComponent::MainComponent()
     playButton.setButtonText("Play Random Scale");
     playButton.onClick = [this] { playRandomScale(); };
     playButton.setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
-    playButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::red);
+	playButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     addAndMakeVisible(playButton);
     
     // Set up the stop button
@@ -53,9 +58,6 @@ MainComponent::MainComponent()
                 practiceMode(mode); 
         };
         button->setEnabled(true); // Always enabled for practice mode
-        //        button->setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
-        //        button->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
-        //        button->setColour(juce::TextButton::buttonOnColourId, juce::Colours::lightblue);
         modeButtons.push_back(std::move(button));
         addAndMakeVisible(modeButtons.back().get());
     }
@@ -116,10 +118,6 @@ MainComponent::MainComponent()
         patternComboBox.addItem(audioEngine.getPatternName(patterns[i]), static_cast<int>(i + 1));
     }
     patternComboBox.setSelectedId(1); // Default to Ascending
-    
-    // Apply custom LookAndFeel to control popup menu font size
-    patternComboBox.setLookAndFeel(&customComboBoxLookAndFeel);
-    
     addAndMakeVisible(patternComboBox);
     
     patternLabel.setText("Pattern:", juce::dontSendNotification);
@@ -134,7 +132,6 @@ MainComponent::MainComponent()
     
     // Style as square checkbox (not radio button)
     randomizeModeButtonsCheckbox.setRadioGroupId(0); // 0 means not part of radio group
-    randomizeModeButtonsCheckbox.setColour(juce::ToggleButton::textColourId, juce::Colours::white);
     randomizeModeButtonsCheckbox.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
     
     // Ensure it's clickable
@@ -153,7 +150,6 @@ MainComponent::MainComponent()
     
     // Style as square checkbox (not radio button)
     randomizeRootCheckbox.setRadioGroupId(0); // 0 means not part of radio group
-    randomizeRootCheckbox.setColour(juce::ToggleButton::textColourId, juce::Colours::white);
     randomizeRootCheckbox.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
     
     // Ensure it's clickable
@@ -166,6 +162,28 @@ MainComponent::MainComponent()
     rootSelectionLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(rootSelectionLabel);
     
+    // Set up light mode toggle
+	colorsLabel.setText("Colors:", juce::dontSendNotification);
+	colorsLabel.setJustificationType(juce::Justification::centredRight);
+	addAndMakeVisible(colorsLabel);
+
+    lightModeToggle.setButtonText("Light mode");
+    lightModeToggle.setToggleState(true, juce::dontSendNotification); // Light mode by default
+    lightModeToggle.setRadioGroupId(0); // Not part of radio group
+    lightModeToggle.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
+    lightModeToggle.setClickingTogglesState(true);
+    lightModeToggle.onClick = [this] { 
+        bool isLightMode = lightModeToggle.getToggleState();
+        if (isLightMode) {
+            setLookAndFeel(&lightModeLookAndFeel);
+        } else {
+            setLookAndFeel(nullptr); // Use default dark theme
+        }
+        repaint();
+    };
+    addAndMakeVisible(lightModeToggle);
+	lightModeToggle.onClick();
+    
     // Set up options section label
     optionsLabel.setText("Options", juce::dontSendNotification);
     optionsLabel.setJustificationType(juce::Justification::centred);
@@ -173,7 +191,6 @@ MainComponent::MainComponent()
     difficultyFont.setHeight(16.0f);
     difficultyFont.setBold(true);
     optionsLabel.setFont(difficultyFont);
-    optionsLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     addAndMakeVisible(optionsLabel);
     
     // Some platforms require permissions to open input channels so request that here
@@ -200,6 +217,7 @@ MainComponent::~MainComponent()
 {
     // Clean up custom LookAndFeel
     patternComboBox.setLookAndFeel(nullptr);
+    setLookAndFeel(nullptr);  // Reset to default LookAndFeel
     
     shutdownAudio();
 }
@@ -207,10 +225,6 @@ MainComponent::~MainComponent()
 void MainComponent::paint(juce::Graphics& g)
 {
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-    
-    g.setColour(juce::Colours::white);
-    g.setFont(24.0f);
-    g.drawText("Musical Mode Trainer", getLocalBounds().removeFromTop(60), juce::Justification::centred);
 }
 
 void MainComponent::resized()
@@ -219,7 +233,8 @@ void MainComponent::resized()
     auto windowHorizontalMargin = 24;
     
     // Title area
-    area.removeFromTop(60);
+    titleLabel.setBounds(area.removeFromTop(60));
+    area.removeFromTop(10); // Add some spacing
     
     // Score label
     scoreLabel.setBounds(area.removeFromTop(25));
@@ -291,13 +306,16 @@ void MainComponent::resized()
     layOutLabelAndControl(rootSelectionLabel, randomizeRootCheckbox);
     layOutLabelAndControl(speedLabel, speedSlider);
     layOutLabelAndControl(patternLabel, patternComboBox);
-    layOutLabelAndControl(modeButtonsLabel, randomizeModeButtonsCheckbox);
+	layOutLabelAndControl(modeButtonsLabel, randomizeModeButtonsCheckbox);
+	layOutLabelAndControl(colorsLabel, lightModeToggle);
     
+	// Small layout tweaks
     patternComboBox.setBounds(patternComboBox.getBounds().reduced(0, 6));
     auto checkboxNudgeX = -4;
     auto checkboxNudgeY = 1;
     randomizeRootCheckbox.setBounds(randomizeRootCheckbox.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
-    randomizeModeButtonsCheckbox.setBounds(randomizeModeButtonsCheckbox.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
+	randomizeModeButtonsCheckbox.setBounds(randomizeModeButtonsCheckbox.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
+	lightModeToggle.setBounds(lightModeToggle.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
 }
 
 void MainComponent::showAboutDialog()
@@ -348,8 +366,7 @@ void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
     // After a short delay, show the instruction for next turn
     juce::Timer::callAfterDelay(2000, [this]() {
         if (!gameActive) { // Only update if still not in game
-            statusLabel.setText(instructionsText, juce::dontSendNotification);
-            statusLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+			showInstructionsText();
         }
     });
     
@@ -359,7 +376,6 @@ void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
 void MainComponent::showInstructionsText()
 {
     statusLabel.setText(instructionsText, juce::dontSendNotification);
-    statusLabel.setColour(juce::Label::textColourId, juce::Colours::white);
 }
 
 void MainComponent::practiceMode(AudioEngine::ModeType mode)
