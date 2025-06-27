@@ -418,14 +418,13 @@ void MainComponent::practiceMode(AudioEngine::ModeType mode)
     // Convert note index to frequency
     int noteIndex = static_cast<int>(rootNoteSlider.getValue());
     float rootFreq = static_cast<float>(noteNameToFrequency(noteIndex));
-    auto selectedPattern = getSelectedPattern();
     audioEngine.onPlaybackFinished = [this]() {
         // Show instructions when playback finishes
         if (!gameActive && !audioEngine.isCurrentlyPlaying()) {
             showInstructionsText();
         }
     };
-    audioEngine.playMode(mode, rootFreq, selectedPattern);
+    audioEngine.playMode(mode, rootFreq, AudioEngine::PlaybackPattern::Ascending);
     
 	setStatusWithText(GameStatus::playingForPractice, "Playing " + audioEngine.getModeName(mode) + "... Try to remember how this sounds...");
 }
