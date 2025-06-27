@@ -17,6 +17,8 @@
             file="Source/AudioEngine.h"/>
       <FILE id="AboutDialog" name="AboutDialog.h" compile="0" resource="0"
             file="Source/AboutDialog.h"/>
+      <FILE id="CustomLookAndFeel" name="CustomLookAndFeel.h" compile="0"
+            resource="0" file="Source/CustomLookAndFeel.h"/>
       <FILE id="EmbeddedContent" name="EmbeddedContent.h" compile="0" resource="0"
             file="Source/EmbeddedContent.h"/>
       <FILE id="Main" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>

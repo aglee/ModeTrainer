@@ -3,63 +3,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 #include "AudioEngine.h"
-
-// Custom LookAndFeel for Light Mode
-class LightModeLookAndFeel : public juce::LookAndFeel_V4 {
-public:
-    LightModeLookAndFeel() {
-        setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::lightgrey);
-
-        setColour(juce::Label::textColourId, juce::Colours::black);
-
-        setColour(juce::TextButton::buttonColourId, juce::Colours::white);
-        setColour(juce::TextButton::textColourOnId, juce::Colours::black);
-        setColour(juce::TextButton::textColourOffId, juce::Colours::black);
-
-        setColour(juce::ComboBox::backgroundColourId, juce::Colours::white);
-        setColour(juce::ComboBox::textColourId, juce::Colours::black);
-		setColour(juce::ComboBox::arrowColourId, juce::Colours::black);
-        setColour(juce::ComboBox::outlineColourId, juce::Colours::darkgrey);
-        setColour(juce::ComboBox::buttonColourId, juce::Colours::lightgrey);
-
-        setColour(juce::ToggleButton::textColourId, juce::Colours::black);
-        setColour(juce::ToggleButton::tickColourId, juce::Colours::black);
-        setColour(juce::ToggleButton::tickDisabledColourId, juce::Colours::grey);
-
-		setColour(juce::Slider::backgroundColourId, juce::Colour(0xffA8A8A8));
-        setColour(juce::Slider::thumbColourId, juce::Colours::darkblue);
-        setColour(juce::Slider::trackColourId, juce::Colours::darkgrey);
-        setColour(juce::Slider::rotarySliderFillColourId, juce::Colours::darkblue);
-        setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colours::darkgrey);
-        setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
-        setColour(juce::Slider::textBoxBackgroundColourId, juce::Colours::white);
-        setColour(juce::Slider::textBoxHighlightColourId, juce::Colours::lightblue);
-        setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::darkgrey);
-        
-        setColour(juce::PopupMenu::backgroundColourId, juce::Colours::white);
-        setColour(juce::PopupMenu::textColourId, juce::Colours::black);
-        setColour(juce::PopupMenu::headerTextColourId, juce::Colours::black);
-        setColour(juce::PopupMenu::highlightedBackgroundColourId, juce::Colours::lightblue);
-        setColour(juce::PopupMenu::highlightedTextColourId, juce::Colours::black);
-    }
-    
-	juce::Font getComboBoxFont(juce::ComboBox&) override
-	{
-		return juce::Font(14.0f);
-	}
-	
-	juce::Font getPopupMenuFont() override
-	{
-		return juce::Font(14.0f);
-	}
-	
-	void getIdealPopupMenuItemSize(const juce::String& text, bool isSeparator, int standardMenuItemHeight,
-								   int& idealWidth, int& idealHeight) override
-	{
-		LookAndFeel_V4::getIdealPopupMenuItemSize(text, isSeparator, standardMenuItemHeight, idealWidth, idealHeight);
-		idealHeight = 22;
-	}
-};
+#include "CustomLookAndFeel.h"
 
 class MainComponent  : public juce::AudioAppComponent
 {
@@ -80,9 +24,18 @@ public:
 private:
     AudioEngine audioEngine;
     juce::Random random;
-	const juce::String instructionsText = "Click \"Play Random Scale\" to test your knowledge, or click any mode button to hear that scale.";
-
+	
+	enum class GameStatus : int {
+		instructions,
+		playingForPractice,
+		playingForGuess,
+		waitingForGuess,
+		correctGuess,
+		incorrectGuess
+	};
+	
     // Game state
+	GameStatus gameStatus;
     int score;
     int totalQuestions;
     AudioEngine::ModeType currentMode;
@@ -116,9 +69,18 @@ private:
     juce::ToggleButton lightModeToggle;
     
     // Custom LookAndFeel
-    LightModeLookAndFeel lightModeLookAndFeel;
+	LightModeLookAndFeel lightModeLookAndFeel;
+	DarkModeLookAndFeel darkModeLookAndFeel;
+	std::reference_wrapper<CustomLookAndFeel> currentLookAndFeel = lightModeLookAndFeel;
+	void setCustomLookAndFeel(CustomLookAndFeel &lookAndFeel) {
+		setLookAndFeel(&lookAndFeel);
+		currentLookAndFeel = lookAndFeel;
+		updateStatusLabelColour();
+	}
 
     // Methods
+	void setStatusWithText(GameStatus status, juce::String text);
+	void updateStatusLabelColour();
     void playRandomScale();
     void stopPlaying();
     void guessMode(AudioEngine::ModeType guessedMode);

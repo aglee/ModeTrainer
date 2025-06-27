@@ -173,9 +173,9 @@ MainComponent::MainComponent()
     lightModeToggle.onClick = [this] { 
         bool isLightMode = lightModeToggle.getToggleState();
         if (isLightMode) {
-            setLookAndFeel(&lightModeLookAndFeel);
+            setCustomLookAndFeel(lightModeLookAndFeel);
         } else {
-            setLookAndFeel(nullptr); // Use default dark theme
+            setCustomLookAndFeel(darkModeLookAndFeel);
         }
         repaint();
     };
@@ -215,7 +215,7 @@ MainComponent::~MainComponent()
 {
     // Clean up custom LookAndFeel
     patternComboBox.setLookAndFeel(nullptr);
-    setLookAndFeel(nullptr);  // Reset to default LookAndFeel
+    setLookAndFeel(nullptr);
     
     shutdownAudio();
 }
@@ -331,6 +331,42 @@ void MainComponent::showAboutDialog()
     options.launchAsync();
 }
 
+void MainComponent::setStatusWithText(GameStatus status, juce::String text)
+{
+	gameStatus = status;
+	statusLabel.setText(text, juce::dontSendNotification);
+	updateStatusLabelColour();
+}
+
+void MainComponent::updateStatusLabelColour()
+{
+	juce::Colour textColor = getLookAndFeel().findColour(juce::Label::textColourId);
+	CustomLookAndFeel &lookAndFeel = currentLookAndFeel.get();
+	switch (gameStatus) {
+		case GameStatus::instructions:
+			textColor = lookAndFeel.getInstructionsColour();
+			break;
+		case GameStatus::playingForPractice:
+			textColor = lookAndFeel.getPlayingForPracticeColour();
+			break;
+		case GameStatus::playingForGuess:
+			textColor = lookAndFeel.getPlayingForGuessColour();
+			break;
+		case GameStatus::waitingForGuess:
+			textColor = lookAndFeel.getWaitingForGuessColour();
+			break;
+		case GameStatus::correctGuess:
+			textColor = lookAndFeel.getCorrectGuessColour();
+			break;
+		case GameStatus::incorrectGuess:
+			textColor = lookAndFeel.getIncorrectGuessColour();
+			break;
+		default:
+			jassertfalse;
+	}
+	statusLabel.setColour(juce::Label::textColourId, textColor);
+}
+
 // MARK: - (Game play)
 
 void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
@@ -344,14 +380,12 @@ void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
     if (correct)
     {
         score++;
-        statusLabel.setText("Correct! That was " + audioEngine.getModeName(currentMode) + ".", juce::dontSendNotification);
-        statusLabel.setColour(juce::Label::textColourId, juce::Colours::green);
+		setStatusWithText(GameStatus::correctGuess, "Correct! That was " + audioEngine.getModeName(currentMode) + ".");
     }
     else
     {
-        statusLabel.setText("Incorrect. That was " + audioEngine.getModeName(currentMode) + 
-                            ", you guessed " + audioEngine.getModeName(guessedMode) + ".", juce::dontSendNotification);
-        statusLabel.setColour(juce::Label::textColourId, juce::Colours::red);
+		setStatusWithText(GameStatus::incorrectGuess, "Incorrect. That was " + audioEngine.getModeName(currentMode) + 
+						  ", you guessed " + audioEngine.getModeName(guessedMode) + ".");
     }
     
     // Update score display
@@ -373,8 +407,7 @@ void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
 
 void MainComponent::showInstructionsText()
 {
-    statusLabel.setText(instructionsText, juce::dontSendNotification);
-	statusLabel.setColour(juce::Label::textColourId, juce::Colours::black);
+	setStatusWithText(GameStatus::instructions, "Click \"Play Random Scale\" to test your knowledge, or click any mode button to hear that scale.");
 }
 
 void MainComponent::practiceMode(AudioEngine::ModeType mode)
@@ -394,8 +427,7 @@ void MainComponent::practiceMode(AudioEngine::ModeType mode)
     };
     audioEngine.playMode(mode, rootFreq, selectedPattern);
     
-    statusLabel.setText("Playing " + audioEngine.getModeName(mode) + "...", juce::dontSendNotification);
-    statusLabel.setColour(juce::Label::textColourId, juce::Colours::black);
+	setStatusWithText(GameStatus::playingForPractice, "Playing " + audioEngine.getModeName(mode) + "... Try to remember how this sounds...");
 }
 
 AudioEngine::PlaybackPattern MainComponent::getSelectedPattern() const
@@ -485,12 +517,12 @@ void MainComponent::playRandomScale()
     auto selectedPattern = getSelectedPattern();
     audioEngine.onPlaybackFinished = [this]() {
         statusLabel.setText("", juce::dontSendNotification);
+		setStatusWithText(GameStatus::waitingForGuess, "Click a mode button to enter your answer...");
     };
     audioEngine.playMode(currentMode, rootFreq, selectedPattern);
     
     gameActive = true;
-    statusLabel.setText("Playing... Listen and select your answer below...", juce::dontSendNotification);
-    statusLabel.setColour(juce::Label::textColourId, juce::Colours::black);
+	setStatusWithText(GameStatus::playingForGuess, "Playing... Listen and select your answer below...");
     
     // Randomize button order if checkbox is checked
     randomizeButtonOrder();
