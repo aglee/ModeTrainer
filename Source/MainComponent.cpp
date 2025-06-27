@@ -132,7 +132,6 @@ MainComponent::MainComponent()
     
     // Style as square checkbox (not radio button)
     randomizeModeButtonsCheckbox.setRadioGroupId(0); // 0 means not part of radio group
-    randomizeModeButtonsCheckbox.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
     
     // Ensure it's clickable
     randomizeModeButtonsCheckbox.setClickingTogglesState(true);
@@ -150,7 +149,6 @@ MainComponent::MainComponent()
     
     // Style as square checkbox (not radio button)
     randomizeRootCheckbox.setRadioGroupId(0); // 0 means not part of radio group
-    randomizeRootCheckbox.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
     
     // Ensure it's clickable
     randomizeRootCheckbox.setClickingTogglesState(true);
@@ -170,7 +168,6 @@ MainComponent::MainComponent()
     lightModeToggle.setButtonText("Light mode");
     lightModeToggle.setToggleState(true, juce::dontSendNotification); // Light mode by default
     lightModeToggle.setRadioGroupId(0); // Not part of radio group
-    lightModeToggle.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
     lightModeToggle.setClickingTogglesState(true);
     lightModeToggle.onClick = [this] { 
         bool isLightMode = lightModeToggle.getToggleState();

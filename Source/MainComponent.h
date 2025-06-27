@@ -23,7 +23,7 @@ public:
         setColour(juce::ComboBox::buttonColourId, juce::Colours::lightgrey);
 
         setColour(juce::ToggleButton::textColourId, juce::Colours::black);
-        setColour(juce::ToggleButton::tickColourId, juce::Colours::black);  // <-- Does not work for some reason -- see drawTickBox().
+        setColour(juce::ToggleButton::tickColourId, juce::Colours::black);
         setColour(juce::ToggleButton::tickDisabledColourId, juce::Colours::grey);
 
 		setColour(juce::Slider::backgroundColourId, juce::Colours::lightgrey);
@@ -37,28 +37,6 @@ public:
         setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::darkgrey);
     }
     
-	// Copied from juce_LookAndFeel_V4 with a one-line change -- see comments in the function body.
-	void drawTickBox (juce::Graphics& g, juce::Component& component,
-					  float x, float y, float w, float h,
-					  const bool ticked,
-					  [[maybe_unused]] const bool isEnabled,
-					  [[maybe_unused]] const bool shouldDrawButtonAsHighlighted,
-					  [[maybe_unused]] const bool shouldDrawButtonAsDown) override
-	{
-		juce::Rectangle<float> tickBounds (x, y, w, h);
-		
-		g.setColour (component.findColour (juce::ToggleButton::tickDisabledColourId));
-		g.drawRoundedRectangle (tickBounds, 4.0f, 1.0f);
-		
-		if (ticked)
-		{
-//			g.setColour (component.findColour (juce::ToggleButton::tickColourId));  // <-- This does not work for some reason.
-			g.setColour (juce::Colours::black);  // <-- Replaced the above line with this.
-			auto tick = getTickShape (0.75f);
-			g.fillPath (tick, tick.getTransformToScaleToFit (tickBounds.reduced (4, 5).toFloat(), false));
-		}
-	}
-	
 	juce::Font getComboBoxFont(juce::ComboBox&) override
 	{
 		return juce::Font(14.0f);
