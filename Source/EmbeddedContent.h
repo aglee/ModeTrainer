@@ -51,8 +51,8 @@ const juce::String README_CONTENT = R"(<!DOCTYPE html>
   <ul>
     <li><strong>Ascending</strong>: Traditional scale from low to high</li>
     <li><strong>Descending</strong>: Scale from high to low</li>
-    <li><strong>Ascending by Thirds</strong>: Intervallic pattern for advanced ear training</li>
-    <li><strong>Descending by Thirds</strong>: Descending intervallic pattern for advanced ear training</li>
+    <li><strong>Thirds Ascending</strong>: Intervallic pattern for advanced ear training</li>
+    <li><strong>Thirds Descending</strong>: Descending intervallic pattern for advanced ear training</li>
     <li><strong>Random</strong>: Notes played in random order for maximum challenge</li>
   </ul>
 </li>
@@ -94,7 +94,7 @@ const juce::String README_CONTENT = R"(<!DOCTYPE html>
 <ul>
 <li><strong>Adjust Root Note</strong>: Use the "Root" slider to change the starting pitch</li>
 <li><strong>Change Speed</strong>: Use the "Speed" slider (0.5x-3.0x) to adjust playback tempo</li>
-  <li><strong>Select Pattern</strong>: Choose from Ascending, Descending, Ascending by Thirds, Descending by Thirds, or Random</li>
+  <li><strong>Select Pattern</strong>: Choose from Ascending, Descending, Thirds Ascending, Thirds Descending, or Random</li>
 <li><strong>Enable Randomization</strong>: Check boxes to randomize button order and/or root pitch for advanced training</li>
 </ul>
 
@@ -159,7 +159,7 @@ const juce::String README_CONTENT = R"(<!DOCTYPE html>
 <li>Focus on the characteristic intervals that define each mode</li>
 <li>Practice with different root frequencies to avoid memorizing absolute pitch</li>
 <li>Listen for the overall "flavor" or mood of each mode rather than individual notes</li>
-<li>Use the intervallic patterns (Ascending/Descending by Thirds) to hear modes in a different context</li>
+<li>Use the intervallic patterns (Thirds Ascending/Thirds Descending) to hear modes in a different context</li>
 <li>Enable randomization options as you become more confident to increase difficulty</li>
 </ul> 
 

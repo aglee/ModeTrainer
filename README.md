@@ -18,8 +18,8 @@ A desktop application built with JUCE for practicing musical mode recognition. T
 - **Multiple Playback Patterns**:
   - **Ascending**: Traditional scale from low to high
   - **Descending**: Scale from high to low
-  - **Ascending by Thirds**: Intervallic pattern for advanced ear training
-  - **Descending by Thirds**: Descending intervallic pattern for advanced ear training
+  - **Thirds Ascending**: Intervallic pattern for advanced ear training
+  - **Thirds Descending**: Descending intervallic pattern for advanced ear training
   - **Random**: Notes played in random order for maximum challenge
 - **Randomization Features**:
   - **Button Order**: Randomize mode button positions to prevent location memorization
@@ -48,7 +48,7 @@ A desktop application built with JUCE for practicing musical mode recognition. T
 ### Customization
 - **Adjust Root Note**: Use the "Root" slider to change the starting pitch
 - **Change Speed**: Use the "Speed" slider (0.5x-3.0x) to adjust playback tempo
-- **Select Pattern**: Choose from Ascending, Descending, Ascending by Thirds, Descending by Thirds, or Random
+- **Select Pattern**: Choose from Ascending, Descending, Thirds Ascending, Thirds Descending, or Random
 - **Enable Randomization**: Check boxes to randomize button order and/or root pitch for advanced training
 
 ### Training Progression
@@ -101,7 +101,7 @@ On macOS, if using Xcode, look for `ModeTrainer.app` in the build output directo
 - Focus on the characteristic intervals that define each mode
 - Practice with different root frequencies to avoid memorizing absolute pitch
 - Listen for the overall "flavor" or mood of each mode rather than individual notes
-- Use the intervallic patterns (Ascending/Descending by Thirds) to hear modes in a different context
+- Use the intervallic patterns (Thirds Ascending/Thirds Descending) to hear modes in a different context
 - Enable randomization options as you become more confident to increase difficulty
 
 Happy practicing!

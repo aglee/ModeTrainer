@@ -23,6 +23,9 @@
             file="Source/EmbeddedContent.h"/>
       <FILE id="Main" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
+    <GROUP id="Documentation" name="Documentation">
+      <FILE id="ReadMe" name="README.md" compile="0" resource="0" file="README.md"/>
+    </GROUP>
     <GROUP id="Resources" name="Resources">
       <FILE id="m0ipj7" name="ModeTrainer.jpeg" compile="0" resource="1"
             file="Resources/ModeTrainer.jpeg"/>
