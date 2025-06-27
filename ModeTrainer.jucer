@@ -3,7 +3,7 @@
 <JUCERPROJECT id="ModeTrainer" name="Mode Trainer" projectType="guiapp" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="1.0.0"
               bundleIdentifier="com.appkido.modetrainer" companyWebsite=""
-              companyEmail="" displaySplashScreen="1" reportAppUsage="1" splashScreenColour="Dark"
+              companyEmail="" displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
               projectLineFeed="&#10;" defines="" cppLanguageStandard="17">
   <MAINGROUP id="RootGroup" name="Mode Trainer">
     <GROUP id="SourceGroup" name="Source">
@@ -22,6 +22,12 @@
       <FILE id="EmbeddedContent" name="EmbeddedContent.h" compile="0" resource="0"
             file="Source/EmbeddedContent.h"/>
       <FILE id="Main" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="MarkdownConverter" name="MarkdownConverter.cpp" compile="1"
+            resource="0" file="Source/MarkdownConverter.cpp"/>
+      <FILE id="MarkdownConverterHeader" name="MarkdownConverter.h" compile="0"
+            resource="0" file="Source/MarkdownConverter.h"/>
+      <FILE id="EmbeddedMarkdownHeader" name="EmbeddedMarkdown.h" compile="0"
+            resource="0" file="Source/EmbeddedMarkdown.h"/>
     </GROUP>
     <GROUP id="Documentation" name="Documentation">
       <FILE id="ReadMe" name="README.md" compile="0" resource="0" file="README.md"/>
