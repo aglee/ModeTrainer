@@ -9,17 +9,23 @@ class LightModeLookAndFeel : public juce::LookAndFeel_V4 {
 public:
     LightModeLookAndFeel() {
         setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::white);
+
         setColour(juce::Label::textColourId, juce::Colours::black);
+
         setColour(juce::TextButton::buttonColourId, juce::Colours::white);
         setColour(juce::TextButton::textColourOnId, juce::Colours::black);
         setColour(juce::TextButton::textColourOffId, juce::Colours::black);
+
         setColour(juce::ComboBox::backgroundColourId, juce::Colours::white);
         setColour(juce::ComboBox::textColourId, juce::Colours::black);
+		setColour(juce::ComboBox::arrowColourId, juce::Colours::black);
         setColour(juce::ComboBox::outlineColourId, juce::Colours::darkgrey);
         setColour(juce::ComboBox::buttonColourId, juce::Colours::lightgrey);
+
         setColour(juce::ToggleButton::textColourId, juce::Colours::black);
         setColour(juce::ToggleButton::tickColourId, juce::Colours::black);  // <-- Does not work for some reason -- see drawTickBox().
         setColour(juce::ToggleButton::tickDisabledColourId, juce::Colours::grey);
+
 		setColour(juce::Slider::backgroundColourId, juce::Colours::lightgrey);
         setColour(juce::Slider::thumbColourId, juce::Colours::darkblue);
         setColour(juce::Slider::trackColourId, juce::Colours::darkgrey);
