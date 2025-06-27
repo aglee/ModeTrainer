@@ -15,12 +15,15 @@ MainComponent::MainComponent()
     
     
     // Make sure the window is properly sized
-    if (auto* window = getTopLevelComponent())
-        window->setSize(800, 600);
+	if (auto* window = getTopLevelComponent()) {
+		window->setSize(800, 600);
+	}
 
     // Set up the play button
-    playButton.setButtonText("Play Random Mode");
-    playButton.onClick = [this] { playRandomMode(); };
+    playButton.setButtonText("Play Random Scale");
+    playButton.onClick = [this] { playRandomScale(); };
+	playButton.setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
+	playButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::red);
     addAndMakeVisible(playButton);
 
     // Set up the stop button
@@ -50,28 +53,26 @@ MainComponent::MainComponent()
                 practiceMode(mode); 
         };
         button->setEnabled(true); // Always enabled for practice mode
-        button->setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
-        button->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
-        button->setColour(juce::TextButton::buttonOnColourId, juce::Colours::lightblue);
+//        button->setColour(juce::TextButton::buttonColourId, juce::Colours::darkblue);
+//        button->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+//        button->setColour(juce::TextButton::buttonOnColourId, juce::Colours::lightblue);
         modeButtons.push_back(std::move(button));
         addAndMakeVisible(modeButtons.back().get());
     }
 
-    // Set up labels
-    instructionLabel.setText("Click 'Play Random Mode' to start, or click any mode button to practice!", juce::dontSendNotification);
-    instructionLabel.setJustificationType(juce::Justification::centred);
-    addAndMakeVisible(instructionLabel);
+    // Set up labels - instruction text moved to status field
 
     scoreLabel.setText("Score: 0/0", juce::dontSendNotification);
     scoreLabel.setJustificationType(juce::Justification::centred);
+	scoreLabel.setFont(scoreLabel.getFont().withHeight(20.0f));
     addAndMakeVisible(scoreLabel);
 
-    statusLabel.setText("", juce::dontSendNotification);
+    statusLabel.setText(instructionsText, juce::dontSendNotification);
     statusLabel.setJustificationType(juce::Justification::centred);
-    auto font = statusLabel.getFont();
-    font.setHeight(16.0f);
-    font.setBold(true);
-    statusLabel.setFont(font);
+    auto statusLabelFont = statusLabel.getFont();
+    statusLabelFont.setHeight(16.0f);
+    statusLabelFont.setBold(true);
+    statusLabel.setFont(statusLabelFont);
     addAndMakeVisible(statusLabel);
 
     // Set up root note slider (now using note indices instead of frequencies)
@@ -115,6 +116,10 @@ MainComponent::MainComponent()
         patternComboBox.addItem(audioEngine.getPatternName(patterns[i]), static_cast<int>(i + 1));
     }
     patternComboBox.setSelectedId(1); // Default to Ascending
+    
+    // Apply custom LookAndFeel to control popup menu font size
+    patternComboBox.setLookAndFeel(&customComboBoxLookAndFeel);
+    
     addAndMakeVisible(patternComboBox);
 
     patternLabel.setText("Pattern:", juce::dontSendNotification);
@@ -122,20 +127,20 @@ MainComponent::MainComponent()
     addAndMakeVisible(patternLabel);
 
     // Set up randomize buttons checkbox
-    randomizeButtonsCheckbox.setButtonText("Randomize order on each turn");
-    randomizeButtonsCheckbox.setToggleState(false, juce::dontSendNotification); // Off by default
+    randomizeModeButtonsCheckbox.setButtonText("Randomize button order on each turn");
+    randomizeModeButtonsCheckbox.setToggleState(false, juce::dontSendNotification); // Off by default
     
     // Note: ToggleButton font is controlled by the LookAndFeel
     
     // Style as square checkbox (not radio button)
-    randomizeButtonsCheckbox.setRadioGroupId(0); // 0 means not part of radio group
-    randomizeButtonsCheckbox.setColour(juce::ToggleButton::textColourId, juce::Colours::white);
-    randomizeButtonsCheckbox.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
+    randomizeModeButtonsCheckbox.setRadioGroupId(0); // 0 means not part of radio group
+    randomizeModeButtonsCheckbox.setColour(juce::ToggleButton::textColourId, juce::Colours::white);
+    randomizeModeButtonsCheckbox.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
     
     // Ensure it's clickable
-    randomizeButtonsCheckbox.setClickingTogglesState(true);
+    randomizeModeButtonsCheckbox.setClickingTogglesState(true);
     
-    addAndMakeVisible(randomizeButtonsCheckbox);
+    addAndMakeVisible(randomizeModeButtonsCheckbox);
     
     // Set up mode buttons label
     modeButtonsLabel.setText("Mode Buttons:", juce::dontSendNotification);
@@ -143,23 +148,33 @@ MainComponent::MainComponent()
     addAndMakeVisible(modeButtonsLabel);
 
     // Set up root pitch randomize checkbox
-    randomizeRootPitchCheckbox.setButtonText("Randomize");
-    randomizeRootPitchCheckbox.setToggleState(false, juce::dontSendNotification); // Off by default
+    randomizeRootCheckbox.setButtonText("Randomize");
+    randomizeRootCheckbox.setToggleState(false, juce::dontSendNotification); // Off by default
     
     // Style as square checkbox (not radio button)
-    randomizeRootPitchCheckbox.setRadioGroupId(0); // 0 means not part of radio group
-    randomizeRootPitchCheckbox.setColour(juce::ToggleButton::textColourId, juce::Colours::white);
-    randomizeRootPitchCheckbox.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
+    randomizeRootCheckbox.setRadioGroupId(0); // 0 means not part of radio group
+    randomizeRootCheckbox.setColour(juce::ToggleButton::textColourId, juce::Colours::white);
+    randomizeRootCheckbox.setColour(juce::ToggleButton::tickColourId, juce::Colours::lightblue);
     
     // Ensure it's clickable
-    randomizeRootPitchCheckbox.setClickingTogglesState(true);
+    randomizeRootCheckbox.setClickingTogglesState(true);
     
-    addAndMakeVisible(randomizeRootPitchCheckbox);
+    addAndMakeVisible(randomizeRootCheckbox);
     
     // Set up root pitch label
     rootSelectionLabel.setText("Root Selection:", juce::dontSendNotification);
     rootSelectionLabel.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(rootSelectionLabel);
+    
+    // Set up options section label
+    optionsLabel.setText("Options", juce::dontSendNotification);
+    optionsLabel.setJustificationType(juce::Justification::centred);
+    auto difficultyFont = optionsLabel.getFont();
+    difficultyFont.setHeight(16.0f);
+    difficultyFont.setBold(true);
+    optionsLabel.setFont(difficultyFont);
+    optionsLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    addAndMakeVisible(optionsLabel);
 
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired(juce::RuntimePermissions::recordAudio)
@@ -183,6 +198,9 @@ MainComponent::MainComponent()
 
 MainComponent::~MainComponent()
 {
+    // Clean up custom LookAndFeel
+    patternComboBox.setLookAndFeel(nullptr);
+    
     shutdownAudio();
 }
 
@@ -230,85 +248,41 @@ void MainComponent::showAboutDialog()
 void MainComponent::resized()
 {
     auto area = getLocalBounds();
-	auto spaceForLabel = 120;
-	auto labelRightMargin = 0;
-	auto windowHorizontalMargin = 24;
+    auto windowHorizontalMargin = 24;
     
     // Title area
     area.removeFromTop(60);
 
-    // Instruction and score labels
-    instructionLabel.setBounds(area.removeFromTop(25));
+    // Score label
     scoreLabel.setBounds(area.removeFromTop(25));
-
-    // Root note area: label, slider
-    auto rootNoteArea = area.removeFromTop(35).reduced(0, 10);
-    auto rootNoteLabelBounds = rootNoteArea.removeFromLeft(spaceForLabel);
-	rootNoteLabelBounds.removeFromRight(labelRightMargin);
-    rootNoteLabel.setBounds(rootNoteLabelBounds);
-	rootNoteArea.removeFromRight(windowHorizontalMargin);
-    rootNoteSlider.setBounds(rootNoteArea);
-
-	// Root selection area: label, checkbox
-	auto rootSelectionArea = area.removeFromTop(35).reduced(0, 10);
-	auto rootSelectionLabelBounds = rootSelectionArea.removeFromLeft(spaceForLabel);
-	rootSelectionLabelBounds.removeFromRight(labelRightMargin);
-	rootSelectionLabel.setBounds(rootSelectionLabelBounds);
-	rootSelectionArea.removeFromRight(windowHorizontalMargin);
-	randomizeRootPitchCheckbox.setBounds(rootSelectionArea.expanded(0, 3).translated(-3, 0));
-	
-    // Speed slider area: label, slider
-    auto speedArea = area.removeFromTop(35).reduced(0, 10);
-    auto speedLabelBounds = speedArea.removeFromLeft(spaceForLabel);
-	speedLabelBounds.removeFromRight(labelRightMargin);
-    speedLabel.setBounds(speedLabelBounds);
-	speedArea.removeFromRight(windowHorizontalMargin);
-    speedSlider.setBounds(speedArea);
-
-    // Pattern area: label, combo box
-    auto patternArea = area.removeFromTop(35).reduced(0, 10);
-    auto patternLabelBounds = patternArea.removeFromLeft(spaceForLabel);
-    patternLabelBounds.removeFromRight(labelRightMargin);
-    patternLabel.setBounds(patternLabelBounds);
-	patternArea.removeFromRight(windowHorizontalMargin);
-	patternComboBox.setBounds(patternArea.expanded(0, 4));
-
-    // Mode buttons area: label, checkbox
-    auto modeButtonsArea = area.removeFromTop(35).reduced(0, 10);
-    auto modeButtonsLabelBounds = modeButtonsArea.removeFromLeft(spaceForLabel);
-    modeButtonsLabelBounds.removeFromRight(labelRightMargin);
-    modeButtonsLabel.setBounds(modeButtonsLabelBounds);
-	modeButtonsArea.removeFromRight(windowHorizontalMargin);
-	randomizeButtonsCheckbox.setBounds(modeButtonsArea.expanded(0, 3).translated(-3, 0));
-
+    
     area.removeFromTop(10); // Add some spacing
 
+	// Status label
+	statusLabel.setBounds(area.removeFromTop(40));
+	
     // Control buttons
-	auto controlSpacing = 8;
-	auto controlArea = area.removeFromTop(50).reduced(windowHorizontalMargin, 5);
-	auto playArea = controlArea.removeFromLeft((controlArea.getWidth() - 2*controlSpacing) / 3);
-	controlArea.removeFromLeft(controlSpacing);
+    auto controlSpacing = 8;
+    auto controlArea = area.removeFromTop(50).reduced(windowHorizontalMargin, 5);
+    auto playArea = controlArea.removeFromLeft((controlArea.getWidth() - 2*controlSpacing) / 3);
+    controlArea.removeFromLeft(controlSpacing);
     auto stopArea = controlArea.removeFromLeft((controlArea.getWidth() - 1*controlSpacing) / 2);
-	controlArea.removeFromLeft(controlSpacing);
+    controlArea.removeFromLeft(controlSpacing);
     auto aboutArea = controlArea;
     
     playButton.setBounds(playArea);
     stopButton.setBounds(stopArea);
     aboutButton.setBounds(aboutArea);
 
-    // Status label
-    statusLabel.setBounds(area.removeFromTop(40));
-    
-    area.removeFromTop(10); // Add spacing before mode buttons
+    area.removeFromTop(15); // Add spacing before mode buttons
 
-    // Mode selection buttons - use remaining space at bottom
-    // Reserve space for mode buttons at the bottom
-	auto modeArea = area.reduced(windowHorizontalMargin, 0);
-    int buttonHeight = 45;
+    // Mode selection buttons - use middle space
+    auto modeArea = area.removeFromTop(40).reduced(windowHorizontalMargin, 0);
+    int buttonHeight = 28;
     int buttonSpacing = 8;
-    int buttonsPerRow = 4;
+	int buttonsPerRow = 7;   //4;
     
-    // Calculate button width to fit 4 buttons per row with spacing
+    // Calculate button width to fit buttonsPerRow buttons per row with spacing
     int totalButtonWidth = modeArea.getWidth() - (buttonsPerRow + 1) * buttonSpacing;
     int buttonWidth = totalButtonWidth / buttonsPerRow;
     
@@ -317,11 +291,11 @@ void MainComponent::resized()
         int row = static_cast<int>(i) / buttonsPerRow;
         int col = static_cast<int>(i) % buttonsPerRow;
         
-        // Center the last row if it has fewer buttons (3 buttons in row 2)
+        // Center the second row if it has fewer buttons
         int xOffset = 0;
-        if (row == 1) // Second row with 3 buttons
+        if (row == 1)
         {
-            int buttonsInLastRow = static_cast<int>(modeButtons.size()) - buttonsPerRow; // 7 - 4 = 3
+            int buttonsInLastRow = static_cast<int>(modeButtons.size()) - buttonsPerRow;
             xOffset = (buttonsPerRow - buttonsInLastRow) * (buttonWidth + buttonSpacing) / 2;
         }
         
@@ -330,9 +304,36 @@ void MainComponent::resized()
         
         modeButtons[i]->setBounds(x, y, buttonWidth, buttonHeight);
     }
+    
+    area.removeFromTop(20); // Add vertical spacing
+    
+    // === OPTIONS SECTION (at bottom) ===
+    
+    optionsLabel.setBounds(area.removeFromTop(25));
+    area.removeFromTop(5); // Small spacing below section label
+
+	auto layOutLabelAndControl = [&area](Component &label, Component &control) {
+		auto slice = area.removeFromTop(35).reduced(24, 0);
+		auto labelArea = slice.removeFromLeft(100);
+		auto controlArea = slice;
+		label.setBounds(labelArea);
+		control.setBounds(controlArea);
+	};
+	
+	layOutLabelAndControl(rootNoteLabel, rootNoteSlider);
+	layOutLabelAndControl(rootSelectionLabel, randomizeRootCheckbox);
+	layOutLabelAndControl(speedLabel, speedSlider);
+	layOutLabelAndControl(patternLabel, patternComboBox);
+	layOutLabelAndControl(modeButtonsLabel, randomizeModeButtonsCheckbox);
+	
+	patternComboBox.setBounds(patternComboBox.getBounds().reduced(0, 6));
+	auto checkboxNudgeX = -4;
+	auto checkboxNudgeY = 1;
+	randomizeRootCheckbox.setBounds(randomizeRootCheckbox.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
+	randomizeModeButtonsCheckbox.setBounds(randomizeModeButtonsCheckbox.getBounds().translated(checkboxNudgeX, checkboxNudgeY));
 }
 
-void MainComponent::playRandomMode()
+void MainComponent::playRandomScale()
 {
     if (audioEngine.isCurrentlyPlaying())
         return;
@@ -351,7 +352,7 @@ void MainComponent::playRandomMode()
 
     // Handle root pitch randomization
     float rootFreq;
-    if (randomizeRootPitchCheckbox.getToggleState())
+    if (randomizeRootCheckbox.getToggleState())
     {
         // Generate random note index within slider range
         double minNote = rootNoteSlider.getMinimum();
@@ -378,8 +379,7 @@ void MainComponent::playRandomMode()
     audioEngine.playMode(currentMode, rootFreq, selectedPattern);
 
     gameActive = true;
-    instructionLabel.setText("Listen to the mode and select your answer below:", juce::dontSendNotification);
-    statusLabel.setText("Playing...", juce::dontSendNotification);
+    statusLabel.setText("Playing... Listen and select your answer below.", juce::dontSendNotification);
     statusLabel.setColour(juce::Label::textColourId, juce::Colours::lightblue);
 
     // Randomize button order if checkbox is checked
@@ -428,7 +428,14 @@ void MainComponent::guessMode(AudioEngine::ModeType guessedMode)
                       juce::dontSendNotification);
 
     gameActive = false;
-    instructionLabel.setText("Click 'Play Random Mode' for the next question, or practice with any mode button!", juce::dontSendNotification);
+    
+    // After a short delay, show the instruction for next turn
+	juce::Timer::callAfterDelay(2000, [this]() {
+        if (!gameActive) { // Only update if still not in game
+			statusLabel.setText(instructionsText, juce::dontSendNotification);
+            statusLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+        }
+    });
     
     // Buttons stay enabled for practice mode
 }
@@ -469,7 +476,7 @@ void MainComponent::randomizeButtonOrder()
 {
     auto modes = audioEngine.getAllModes();
     
-    if (randomizeButtonsCheckbox.getToggleState())
+    if (randomizeModeButtonsCheckbox.getToggleState())
     {
         // Shuffle the mode order
         modeOrder = modes; // Reset to original order first
